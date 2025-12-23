@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>LIBEYVARU by Miu (Mobile)</title>
+  <title>LIBEYVARU Pro</title>
   <style>
     :root {
       --bg: #000000;
@@ -14,14 +14,14 @@
       --text: #ffffff;
       --text-dim: #8e8e93;
       --border: #38383a;
-      --success: #30d158;
+      --success: #32d74b;
       --glass: rgba(28, 28, 30, 0.85);
     }
 
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
     
     body { 
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background: var(--bg); color: var(--text); margin: 0; padding: 0;
       height: 100vh; overflow: hidden; display: flex; justify-content: center;
     }
@@ -29,70 +29,77 @@
     .app-container { width: 100%; max-width: 450px; height: 100%; display: flex; flex-direction: column; position: relative; }
 
     header { 
-      padding: calc(45px + env(safe-area-inset-top)) 20px 10px; 
-      background: var(--bg); 
-      flex-shrink: 0;
+      padding: calc(50px + env(safe-area-inset-top)) 20px 15px; 
+      background: var(--bg); flex-shrink: 0;
     }
-    .brand { font-weight: 700; font-size: 1.5rem; letter-spacing: -0.5px; }
-    .brand span { color: var(--accent); font-weight: 400; font-size: 0.85rem; margin-left: 4px;}
+    .brand { font-weight: 800; font-size: 1.6rem; letter-spacing: -1px; }
+    .brand span { color: var(--accent); font-weight: 500; font-size: 0.8rem; margin-left: 6px; letter-spacing: 0; }
 
-    main { flex: 1; overflow-y: auto; padding: 0 16px 130px 16px; -webkit-overflow-scrolling: touch; }
+    main { flex: 1; overflow-y: auto; padding: 0 16px 140px 16px; -webkit-overflow-scrolling: touch; }
     
-    .page { display: none; animation: fadeIn 0.3s ease; }
+    .page { display: none; animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
     .page.active { display: block; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* Fix spacing on labels to avoid overlapping inputs */
-    label { display: block; font-size: 11px; color: var(--text-dim); margin: 12px 0 6px 4px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+    label { display: block; font-size: 11px; color: var(--text-dim); margin: 0 0 8px 4px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
     
     select, input { 
-      width: 100%; background: var(--card); color: white; padding: 14px; 
-      border-radius: 14px; border: 1px solid var(--border); margin-bottom: 4px; 
-      font-weight: 500; font-size: 16px; 
+      width: 100%; background: var(--card); color: white; padding: 16px; 
+      border-radius: 14px; border: 1px solid var(--border); margin-bottom: 20px; 
+      font-weight: 600; font-size: 16px; transition: border 0.2s;
     }
-    input[type="month"] { background: #ffffff !important; color: #000000 !important; font-weight: 700; margin-bottom: 20px; }
+    select:focus, input:focus { border-color: var(--accent); }
+    input[type="month"] { background: #ffffff !important; color: #000 !important; }
 
     .glass-card { background: var(--card); border-radius: 24px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border); }
     
-    /* Improved Button Spacing */
+    /* Segmented Control / Toggle */
+    .status-pill-group { display: flex; gap: 10px; margin-bottom: 20px; background: #2c2c2e; padding: 5px; border-radius: 14px; }
+    .status-btn { 
+      flex: 1; padding: 12px; border-radius: 10px; border: none; 
+      background: transparent; color: var(--text-dim); font-weight: 700; font-size: 13px;
+      transition: all 0.2s;
+    }
+    .status-btn.active { background: #48484a; color: white; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+    .status-btn.active.present { color: var(--accent); }
+
+    .ot-container { 
+        background: rgba(255, 255, 255, 0.03); border-radius: 18px; padding: 18px; 
+        border: 1px solid var(--border); transition: all 0.3s;
+    }
+
     .btn { 
-      width: 100%; padding: 18px; border-radius: 16px; border: none; 
-      font-weight: 700; background: var(--accent); color: white; 
-      font-size: 16px; margin-top: 15px; 
+      width: 100%; padding: 18px; border-radius: 18px; border: none; 
+      font-weight: 800; background: var(--accent); color: white; 
+      font-size: 16px; margin-top: 10px; transition: all 0.2s;
     }
-    .btn:active { transform: scale(0.97); opacity: 0.9; }
+    .btn:active { transform: scale(0.96); opacity: 0.9; }
 
-    /* Fixed OT spacing to prevent digit overlap */
-    .time-field-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+    .time-field-row { display: flex; align-items: center; gap: 10px; }
     .time-unit { 
-      flex: 1; background: #2c2c2e; border-radius: 14px; 
+      flex: 1; background: #000; border-radius: 12px; 
       display: flex; align-items: center; border: 1px solid var(--border);
-      padding: 0 12px;
     }
-    .time-unit input { border: none; background: transparent; margin: 0; padding: 12px 0; text-align: center; width: 100%; }
-    .time-sep { font-weight: bold; color: var(--text-dim); font-size: 18px; }
+    .time-unit input { border: none; background: transparent; margin: 0; padding: 12px; text-align: center; }
+    .time-sep { font-weight: 800; color: var(--border); font-size: 20px; }
 
-    /* Tab Layout with better distance */
-    .tabs { display: flex; background: #1c1c1e; padding: 4px; border-radius: 16px; margin: 10px 0 25px 0; border: 1px solid var(--border); }
-    .tab { flex: 1; padding: 12px; border-radius: 12px; text-align: center; font-weight: 600; color: var(--text-dim); font-size: 14px; }
-    .tab.active { background: #3a3a3c; color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+    .tabs { display: flex; background: #1c1c1e; padding: 4px; border-radius: 16px; margin-bottom: 25px; border: 1px solid var(--border); }
+    .tab { flex: 1; padding: 12px; border-radius: 12px; text-align: center; font-weight: 700; color: var(--text-dim); font-size: 13px; }
+    .tab.active { background: var(--accent); color: white; }
 
-    /* Navigation Bar */
     nav { 
       position: absolute; bottom: 0; width: 100%; 
-      height: calc(80px + env(safe-area-inset-bottom));
-      background: var(--glass); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+      height: calc(85px + env(safe-area-inset-bottom));
+      background: var(--glass); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
       border-top: 1px solid var(--border); display: flex; justify-content: space-around; 
-      padding-bottom: env(safe-area-inset-bottom); align-items: center;
-      z-index: 100;
+      padding-bottom: env(safe-area-inset-bottom); align-items: center; z-index: 100;
     }
-    .nav-btn { background: none; border: none; color: var(--text-dim); display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 10px; font-weight: 600; }
+    .nav-btn { background: none; border: none; color: var(--text-dim); display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 10px; font-weight: 700; }
     .nav-btn.active { color: var(--accent); }
-    .nav-btn i { font-style: normal; font-size: 24px; }
+    .nav-btn i { font-style: normal; font-size: 24px; margin-bottom: 2px; }
 
-    /* Slip Styling */
-    .slip-paper { background: #fff; color: #000; padding: 24px; border-radius: 20px; margin-bottom: 20px; font-family: 'SF Mono', 'Courier New', monospace; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
-    .slip-row { display: flex; justify-content: space-between; border-bottom: 1px dashed #ddd; padding: 10px 0; font-size: 14px; }
+    .slip-paper { background: #fff; color: #000; padding: 25px; border-radius: 24px; margin-bottom: 20px; font-family: 'SF Mono', monospace; }
+    .slip-row { display: flex; justify-content: space-between; border-bottom: 1px dashed #ccc; padding: 12px 0; font-size: 13px; font-weight: 500; }
   </style>
 </head>
 <body>
@@ -102,19 +109,22 @@
 
   <main>
     <div id="dash" class="page active">
-        <div class="glass-card" style="background: linear-gradient(135deg, #1c1c1e 0%, #000000 100%);">
-            <label>Combined Total (MVR)</label>
-            <div style="font-size: 2.4rem; font-weight: 800; letter-spacing: -1.5px; padding: 5px 0;" id="totalDisplay">0.00</div>
-            <div style="font-size: 10px; color: var(--success); font-weight: 600;">ACTIVE PAYROLL PERIOD</div>
+        <div class="glass-card" style="background: linear-gradient(145deg, #1c1c1e 0%, #0a0a0a 100%); border-color: #444;">
+            <label>Net Combined Total</label>
+            <div style="font-size: 2.6rem; font-weight: 900; letter-spacing: -2px; padding: 10px 0;" id="totalDisplay">0.00</div>
+            <div style="display:flex; align-items:center; gap:6px;">
+                <div style="width:8px; height:8px; background:var(--success); border-radius:50%;"></div>
+                <div style="font-size: 11px; color: var(--text-dim); font-weight: 700; text-transform:uppercase;">Live Payroll Calculation</div>
+            </div>
         </div>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px;">
-            <div class="glass-card"><label>MIU NET</label><div id="miuNet" style="font-weight:700; font-size: 1.1rem;">0.00</div></div>
-            <div class="glass-card"><label>RAYA NET</label><div id="rayaNet" style="font-weight:700; font-size: 1.1rem;">0.00</div></div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+            <div class="glass-card"><label>MIU NET</label><div id="miuNet" style="font-weight:800; font-size: 1.2rem; color:var(--accent)">0.00</div></div>
+            <div class="glass-card"><label>RAYA NET</label><div id="rayaNet" style="font-weight:800; font-size: 1.2rem; color:var(--success)">0.00</div></div>
         </div>
     </div>
 
     <div id="entry" class="page">
-      <label>Payroll Period</label>
+      <label>Period & User</label>
       <input type="month" id="monthSelect" onchange="initDates()">
 
       <div class="tabs">
@@ -123,49 +133,53 @@
       </div>
 
       <div class="glass-card">
-        <label>Selected Date</label>
-        <select id="dateSelect" onchange="loadDay()" style="margin-bottom: 15px;"></select>
+        <label>Select Date</label>
+        <select id="dateSelect" onchange="loadDay()"></select>
         
         <label>Attendance Status</label>
-        <select id="statusSelect" onchange="toggleOT()" style="margin-bottom: 20px;">
-            <option value="Present">PRESENT</option>
-            <option value="Off-day">OFF-DAY</option>
-        </select>
+        <div class="status-pill-group">
+            <button class="status-btn active present" id="stat-present" onclick="setStatus('Present')">PRESENT</button>
+            <button class="status-btn" id="stat-off" onclick="setStatus('Off-day')">OFF-DAY</button>
+        </div>
 
-        <div id="otSection">
-            <label>Normal OT</label>
+        <div id="otSection" class="ot-container">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <label style="margin:0">Normal OT (1.5x)</label>
+            </div>
             <div class="time-field-row">
-                <div class="time-unit"><input type="number" id="nh" placeholder="Hrs"></div>
+                <div class="time-unit"><input type="number" id="nh" placeholder="Hrs" inputmode="numeric"></div>
                 <span class="time-sep">:</span>
-                <div class="time-unit"><input type="number" id="nm" placeholder="Min"></div>
+                <div class="time-unit"><input type="number" id="nm" placeholder="Min" inputmode="numeric"></div>
             </div>
 
-            <label style="margin-top: 15px;">Double OT</label>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; margin-top:20px;">
+                <label style="margin:0">Double OT (2.0x)</label>
+            </div>
             <div class="time-field-row">
-                <div class="time-unit"><input type="number" id="dh" placeholder="Hrs"></div>
+                <div class="time-unit"><input type="number" id="dh" placeholder="Hrs" inputmode="numeric"></div>
                 <span class="time-sep">:</span>
-                <div class="time-unit"><input type="number" id="dm" placeholder="Min"></div>
+                <div class="time-unit"><input type="number" id="dm" placeholder="Min" inputmode="numeric"></div>
             </div>
         </div>
-        <button class="btn" onclick="saveDay()">Save Day Entry</button>
+        <button class="btn" id="saveBtn" onclick="saveDay()">Save Day Record</button>
       </div>
     </div>
 
     <div id="slips" class="page">
-        <div class="glass-card" style="border-color: var(--accent); padding-bottom: 25px;">
-            <label>Adjust Bonuses (Current User)</label>
-            <div style="display:flex; gap:12px; margin-bottom:5px">
-                <input type="number" id="b6" placeholder="6th Days" style="margin:0">
-                <input type="number" id="be" placeholder="Extra Days" style="margin:0">
+        <div class="glass-card" style="border-color: var(--accent);">
+            <label>Extra Day Bonuses</label>
+            <div style="display:flex; gap:12px; margin-top:5px">
+                <div style="flex:1"><label style="font-size:9px">6th Days</label><input type="number" id="b6" placeholder="0" style="margin:0"></div>
+                <div style="flex:1"><label style="font-size:9px">Extra</label><input type="number" id="be" placeholder="0" style="margin:0"></div>
             </div>
-            <button class="btn" onclick="saveBonus()" style="background: var(--success);">Update Bonuses</button>
+            <button class="btn" onclick="saveBonus()" style="background: var(--success); font-size:14px; padding:14px;">Update Bonuses</button>
         </div>
         <div id="slipList"></div>
     </div>
 
     <div id="rates" class="page">
         <div id="rateList"></div>
-        <button class="btn" onclick="saveRates()" style="margin-top: 5px; margin-bottom: 30px;">Save Financial Configuration</button>
+        <button class="btn" onclick="saveRates()" style="margin-bottom: 40px;">Save Financial Configuration</button>
     </div>
   </main>
 
@@ -202,6 +216,21 @@ function setUser(u) {
     loadDay();
 }
 
+function setStatus(status) {
+    document.getElementById('stat-present').classList.toggle('active', status === 'Present');
+    document.getElementById('stat-off').classList.toggle('active', status === 'Off-day');
+    const ot = document.getElementById('otSection');
+    if(status === 'Off-day') {
+        ot.style.opacity = '0.2';
+        ot.style.pointerEvents = 'none';
+        ot.style.filter = 'grayscale(1)';
+    } else {
+        ot.style.opacity = '1';
+        ot.style.pointerEvents = 'auto';
+        ot.style.filter = 'none';
+    }
+}
+
 function initDates() {
     const sel = document.getElementById('dateSelect'); sel.innerHTML = '';
     const val = document.getElementById('monthSelect').value;
@@ -217,24 +246,25 @@ function initDates() {
     loadDay();
 }
 
-function toggleOT() {
-    const isP = document.getElementById('statusSelect').value === 'Present';
-    document.getElementById('otSection').style.opacity = isP ? '1' : '0.2';
-    document.getElementById('otSection').style.pointerEvents = isP ? 'auto' : 'none';
-}
-
 function saveDay() {
     const m = document.getElementById('monthSelect').value;
     const d = document.getElementById('dateSelect').value;
+    const isPresent = document.getElementById('stat-present').classList.contains('active');
+    const status = isPresent ? 'Present' : 'Off-day';
+    
     const data = JSON.parse(localStorage.getItem(`libey_v3_${m}`)) || {};
     if(!data[curUser]) data[curUser] = { entries: {}, b6:0, be:0 };
     data[curUser].entries[d] = {
-        s: document.getElementById('statusSelect').value,
+        s: status,
         nh: document.getElementById('nh').value, nm: document.getElementById('nm').value,
         dh: document.getElementById('dh').value, dm: document.getElementById('dm').value
     };
     localStorage.setItem(`libey_v3_${m}`, JSON.stringify(data));
-    alert("Day Saved");
+    
+    // Feedback
+    const b = document.getElementById('saveBtn');
+    const t = b.innerText; b.innerText = "ENTRY SAVED ✓"; b.style.background = "var(--success)";
+    setTimeout(() => { b.innerText = t; b.style.background = "var(--accent)"; }, 1200);
 }
 
 function loadDay() {
@@ -242,10 +272,9 @@ function loadDay() {
     const d = document.getElementById('dateSelect').value;
     const data = JSON.parse(localStorage.getItem(`libey_v3_${m}`)) || {};
     const entry = data[curUser]?.entries[d] || {s:'Present', nh:'', nm:'', dh:'', dm:''};
-    document.getElementById('statusSelect').value = entry.s;
+    setStatus(entry.s);
     document.getElementById('nh').value = entry.nh; document.getElementById('nm').value = entry.nm;
     document.getElementById('dh').value = entry.dh; document.getElementById('dm').value = entry.dm;
-    toggleOT();
 }
 
 function saveBonus() {
@@ -256,7 +285,6 @@ function saveBonus() {
     data[curUser].be = document.getElementById('be').value;
     localStorage.setItem(`libey_v3_${m}`, JSON.stringify(data));
     buildSlips();
-    alert("Bonus Updated");
 }
 
 function loadBonusInputs() {
@@ -290,17 +318,17 @@ function buildSlips() {
     users.forEach(u => {
         const p = getPay(u, m);
         h += `<div class="slip-paper">
-            <div style="text-align:center; border-bottom:1px solid #000; padding-bottom:12px; margin-bottom:12px">
-                <div style="font-weight:900; font-size:1.1rem; letter-spacing:1px">${u.toUpperCase()} PAYSLIP</div>
-                <div style="font-size:11px; color:#666">${m}</div>
+            <div style="text-align:center; border-bottom:2px solid #000; padding-bottom:15px; margin-bottom:15px">
+                <div style="font-weight:900; font-size:1.2rem; letter-spacing:1px">${u.toUpperCase()} PAYSLIP</div>
+                <div style="font-size:10px; color:#666; margin-top:4px;">PERIOD: ${m}</div>
             </div>
-            <div class="slip-row"><span>Basic</span><span>${(p.rates.basic||0).toFixed(2)}</span></div>
-            <div class="slip-row"><span>OT Pay</span><span>${p.ot.toFixed(2)}</span></div>
-            <div class="slip-row"><span>Punctuality</span><span>${(p.pr*(p.rates.puncRate||0)).toFixed(2)}</span></div>
+            <div class="slip-row"><span>Basic Salary</span><span>${(p.rates.basic||0).toFixed(2)}</span></div>
+            <div class="slip-row"><span>OT Total</span><span>${p.ot.toFixed(2)}</span></div>
+            <div class="slip-row"><span>Attendance (${p.pr})</span><span>${(p.pr*(p.rates.puncRate||0)).toFixed(2)}</span></div>
             <div class="slip-row"><span>Bonus Days</span><span>${((p.b6*(p.rates.sixthDayRate||0))+(p.be*(p.rates.extraDayRate||0))).toFixed(2)}</span></div>
-            <div class="slip-row"><span>Allowance</span><span>${((p.rates.fixedAllowance||0)+(p.rates.siteAllowance||0)).toFixed(2)}</span></div>
-            <div class="slip-row"><span>Pension</span><span>${(p.rates.pension||0).toFixed(2)}</span></div>
-            <div style="display:flex; justify-content:space-between; font-weight:900; font-size:1.3rem; margin-top:15px; padding-top:12px; border-top:2px solid #000"><span>NET PAY</span><span>${p.net.toLocaleString(undefined,{minimumFractionDigits:2})}</span></div>
+            <div class="slip-row"><span>Fixed Allowances</span><span>${((p.rates.fixedAllowance||0)+(p.rates.siteAllowance||0)).toFixed(2)}</span></div>
+            <div class="slip-row"><span>Pension Contrib.</span><span>${(p.rates.pension||0).toFixed(2)}</span></div>
+            <div style="display:flex; justify-content:space-between; font-weight:900; font-size:1.4rem; margin-top:20px; padding-top:15px; border-top:3px solid #000"><span>NET MVR</span><span>${p.net.toLocaleString(undefined,{minimumFractionDigits:2})}</span></div>
         </div>`;
     });
     document.getElementById('slipList').innerHTML = h;
@@ -317,13 +345,13 @@ function calcDash() {
 function initRates() {
     const con = document.getElementById('rateList'); con.innerHTML = '';
     users.forEach(u => {
-        let h = `<div class="glass-card"><label>${u.toUpperCase()} Financial Setup</label>`;
+        let h = `<div class="glass-card"><label>${u.toUpperCase()} Financial Settings</label>`;
         const s = JSON.parse(localStorage.getItem(`r_${u}`)) || {};
         rateDef.forEach(f => {
             const val = s[f.id] !== undefined ? s[f.id] : f.d;
             h += `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                <span style="font-size:13px; color:var(--text-dim); font-weight:500;">${f.l}</span>
-                <input type="number" step="0.01" class="r-in" data-u="${u}" data-k="${f.id}" value="${val}" style="width:110px; margin:0; padding:10px; background:#000; border-radius:10px;">
+                <span style="font-size:13px; color:var(--text-dim); font-weight:600;">${f.l}</span>
+                <input type="number" step="0.01" class="r-in" data-u="${u}" data-k="${f.id}" value="${val}" style="width:110px; margin:0; padding:10px; background:#000; border-radius:10px; border-color:#444;">
             </div>`;
         });
         con.innerHTML += h + `</div>`;
@@ -335,7 +363,7 @@ function saveRates() {
         const d = {}; document.querySelectorAll(`.r-in[data-u="${u}"]`).forEach(i => d[i.dataset.k] = parseFloat(i.value));
         localStorage.setItem(`r_${u}`, JSON.stringify(d));
     });
-    alert("Financial Configuration Saved");
+    alert("Configuration Saved");
 }
 
 document.getElementById('monthSelect').value = new Date().toISOString().slice(0, 7);
