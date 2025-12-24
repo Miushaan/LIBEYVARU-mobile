@@ -5,39 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>LIBEYVARU PRO</title>
+  <title>LIBEYVARU by Miu</title>
   <style>
     :root {
-      --bg: #000; 
-      --card: #121214; 
-      --accent: #0a84ff; 
-      --text: #ffffff;
-      --text-dim: #9898a0; 
-      --border: rgba(255,255,255,0.08);
-      --success: #30d158;
-      --danger: #ff453a;
-      --glass: rgba(18, 18, 20, 0.9);
+      --bg: #000; --accent: #0a84ff; --text: #ffffff;
+      --text-dim: #9898a0; --border: rgba(255,255,255,0.08);
+      --success: #30d158; --danger: #ff453a; --glass: rgba(18, 18, 20, 0.9);
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
-    
     html, body { 
       background: var(--bg); height: 100%; width: 100%;
       overflow: hidden; position: fixed; top: 0; left: 0;
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+      color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
     }
 
     .app-container { 
       position: absolute; top: 0; left: 0; right: 0; bottom: 0;
       width: 100%; height: 100%; display: flex; flex-direction: column;
       background: radial-gradient(circle at 0% 0%, #1c1c1e 0%, #000 75%);
-      border: 1px solid #1a1a1a;
     }
 
-    header { padding: calc(60px + env(safe-area-inset-top)) 24px 15px; flex-shrink: 0; }
-    .brand { font-weight: 800; font-size: 2rem; letter-spacing: -1.5px; }
-    .brand span { color: var(--accent); font-size: 0.8rem; margin-left: 5px; letter-spacing: 1px; font-weight: 400; }
+    header { padding: calc(60px + env(safe-area-inset-top)) 24px 10px; flex-shrink: 0; }
+    .brand { font-weight: 800; font-size: 1.6rem; letter-spacing: -1px; }
+    .brand span { color: var(--accent); font-size: 0.8rem; margin-left: 4px; font-weight: 400; text-transform: none; opacity: 0.8; }
 
     main { 
       flex: 1; overflow-y: auto; 
@@ -48,78 +39,90 @@
 
     .page { display: none; width: 100%; }
     .page.active { display: block; animation: pageSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-    @keyframes pageSlide { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pageSlide { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
     .glass-card { 
       background: linear-gradient(145deg, #1c1c1e, #121214);
-      border-radius: 28px; padding: 22px; 
-      margin-bottom: 18px; border: 1px solid var(--border);
+      border-radius: 24px; padding: 20px; margin-bottom: 15px; border: 1px solid var(--border);
     }
 
-    label { display: block; font-size: 10px; color: var(--text-dim); margin-bottom: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;}
+    label { display: block; font-size: 9px; color: var(--text-dim); margin-bottom: 6px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;}
 
     input, select { 
-      display: block; width: 100%; background: #000; color: #fff; 
-      padding: 18px; border-radius: 18px; border: 1px solid var(--border);
-      margin-bottom: 15px; font-size: 16px; font-weight: 600; -webkit-appearance: none;
+      display: block; width: 100%; background: #1c1c1e; color: #fff; 
+      padding: 14px; border-radius: 14px; border: 1px solid var(--border);
+      margin-bottom: 12px; font-size: 16px; font-weight: 600; -webkit-appearance: none;
     }
-    input[type="month"] { background: #fff !important; color: #000 !important; }
+    input[type="month"] { background: var(--accent) !important; color: #fff !important; text-align: center; border: none; }
 
-    .tabs { display: flex; background: #000; padding: 5px; border-radius: 20px; margin-bottom: 20px; border: 1px solid var(--border); }
-    .tab { flex: 1; padding: 12px; border-radius: 15px; text-align: center; font-size: 13px; font-weight: 700; color: var(--text-dim); }
-    .tab.active { background: var(--accent); color: #fff; box-shadow: 0 4px 15px rgba(10,132,255,0.3); }
+    .tabs { display: flex; background: #000; padding: 4px; border-radius: 16px; margin-bottom: 15px; border: 1px solid var(--border); }
+    .tab { flex: 1; padding: 10px; border-radius: 12px; text-align: center; font-size: 11px; font-weight: 700; color: var(--text-dim); }
+    .tab.active { background: #fff; color: #000; }
 
-    .status-pill-group { display: flex; gap: 10px; background: #000; padding: 5px; border-radius: 18px; margin-bottom: 20px; }
-    .status-btn { flex: 1; padding: 12px; border-radius: 14px; border: none; background: transparent; color: var(--text-dim); font-weight: 700; font-size: 11px; }
-    .status-btn.active { background: #2c2c2e; color: #fff; }
-
-    .time-field-row { display: flex; gap: 8px; width: 100%; }
-    .time-unit { flex: 1; background: #000; border-radius: 14px; border: 1px solid var(--border); }
-    .time-unit input { border: none; margin: 0; text-align: center; font-size: 18px; font-family: "SF Mono", monospace; padding: 12px 5px; }
-
-    .btn { width: 100%; padding: 20px; border-radius: 22px; border: none; font-weight: 700; background: var(--accent); color: #fff; font-size: 16px; transition: 0.2s; }
-    .btn:active { transform: scale(0.97); opacity: 0.9; }
-    .btn.danger-outline { background: transparent; border: 1px solid var(--danger); color: var(--danger); margin-top: 15px; font-size: 13px; padding: 15px; }
+    .btn { width: 100%; padding: 16px; border-radius: 16px; border: none; font-weight: 700; background: var(--accent); color: #fff; font-size: 15px; transition: transform 0.2s; }
+    .btn.sub { background: #2c2c2e; margin-top: 10px; font-size: 13px; }
+    .btn:active { transform: scale(0.95); }
 
     nav { 
-      position: absolute; bottom: 35px; left: 20px; right: 20px; 
-      height: 75px; background: var(--glass); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-      border-radius: 25px; border: 1px solid var(--border);
+      position: absolute; bottom: 30px; left: 20px; right: 20px; 
+      height: 70px; background: var(--glass); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+      border-radius: 22px; border: 1px solid var(--border);
       display: flex; justify-content: space-around; align-items: center; z-index: 100;
     }
-    .nav-btn { background: none; border: none; color: var(--text-dim); display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; width: 22%; }
+    .nav-btn { background: none; border: none; color: var(--text-dim); display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 9px; font-weight: 700; width: 18%; }
     .nav-btn.active { color: var(--accent); }
-    .nav-btn i { font-style: normal; font-size: 22px; }
+    .nav-btn i { font-style: normal; font-size: 20px; }
 
-    /* DETAILED SLIP DESIGN */
-    .slip-paper { background: #fff; color: #000; padding: 25px; border-radius: 30px; margin-bottom: 20px; width: 100%; }
-    .slip-section-title { font-size: 9px; font-weight: 800; color: #8e8e93; text-transform: uppercase; margin: 15px 0 5px 0; letter-spacing: 0.5px; }
-    .slip-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 12px; font-family: "SF Mono", monospace; border-bottom: 1px solid #f2f2f2; }
-    .slip-row.sub { color: #666; font-size: 10px; border: none; padding-top: 2px; }
-    .total-row { font-size: 1.6rem; font-weight: 800; padding-top: 15px; border-top: 2px solid #000; margin-top: 15px; display: flex; justify-content: space-between; letter-spacing: -1px; }
+    .log-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); }
+    .log-info { display: flex; align-items: center; gap: 12px; }
+    .log-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; background: #1c1c1e; border: 1px solid var(--border); }
+    .log-meta { font-size: 13px; font-weight: 700; }
+    .log-sub { font-size: 9px; color: var(--text-dim); text-transform: uppercase; }
+    .log-amt { font-weight: 800; font-size: 14px; font-family: "SF Mono", monospace; }
+    .amt-in { color: var(--success); }
+    .amt-out { color: var(--danger); }
+
+    .ledger-stats { display: flex; gap: 10px; margin-bottom: 15px; }
+    .ledger-stat-box { flex:1; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 16px; border: 1px solid var(--border); }
+    .ledger-stat-box div { font-size: 12px; font-weight: 800; margin-top: 4px; }
+    .salary-pill { background: var(--success); color: #000; padding: 4px 8px; border-radius: 6px; font-size: 14px; font-weight: 900; display: inline-block; margin-top: 4px; }
+
+    .status-group { display: flex; gap: 8px; margin-bottom: 15px; }
+    .status-opt { flex:1; padding: 12px; border-radius: 12px; background: #000; border: 1px solid var(--border); text-align: center; font-size: 10px; font-weight: 800; color: var(--text-dim); }
+    .status-opt.active { border-color: var(--accent); color: var(--accent); background: rgba(10,132,255,0.1); }
   </style>
 </head>
 <body>
 
 <div class="app-container">
-  <header><div class="brand">LIBEYVARU <span>PRO</span></div></header>
+  <header><div class="brand">LIBEYVARU <span>by Miu</span></div></header>
 
   <main>
     <div id="dash" class="page active">
+        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:15px;">
+            <div style="flex:1; margin-right:12px;">
+                <label>Selected Period</label>
+                <input type="month" id="monthSelect" onchange="syncAll()" style="margin-bottom:0;">
+            </div>
+            <button onclick="refreshDash(this)" class="btn" style="width:50px; height:50px; border-radius:16px; padding:0; display:flex; align-items:center; justify-content:center; background: var(--glass); border: 1px solid var(--border);">
+                <i style="font-style:normal; font-size:18px;">🔄</i>
+            </button>
+        </div>
+
         <div class="glass-card" style="background: linear-gradient(135deg, #0a84ff 0%, #0040dd 100%); border:none;">
-            <label style="color: rgba(255,255,255,0.7)">Net Combined Balance</label>
-            <div style="font-size: 3rem; font-weight: 800; letter-spacing: -2.5px; margin: 5px 0;" id="totalDisplay">0.00</div>
-            <div style="font-size: 10px; font-weight: 700; opacity: 0.8; letter-spacing: 1px;">MVR • LIVE CALCULATED</div>
+            <label style="color: rgba(255,255,255,0.7)">Available Balance</label>
+            <div style="font-size: 2.8rem; font-weight: 800; letter-spacing: -2px; margin: 5px 0;" id="walletDisplay">0.00</div>
+            <div style="font-size: 10px; font-weight: 700; opacity: 0.8;" id="totalEarnedLabel">Total Income: 0.00</div>
         </div>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-            <div class="glass-card"><label>MIU</label><div id="miuNet" style="font-weight:800; color:var(--accent); font-size: 1.2rem;">0.00</div></div>
-            <div class="glass-card"><label>RAYA</label><div id="rayaNet" style="font-weight:800; color:var(--success); font-size: 1.2rem;">0.00</div></div>
+        
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="glass-card"><label>MIU Net</label><div id="miuNet" style="font-weight:800; color:var(--accent);">0.00</div></div>
+            <div class="glass-card"><label>RAYA Net</label><div id="rayaNet" style="font-weight:800; color:var(--success);">0.00</div></div>
         </div>
+        <div class="glass-card" style="border-color: var(--danger);"><label>Total Expenses</label><div id="dashExp" style="font-weight:800; color:var(--danger); font-size: 1.2rem;">0.00</div></div>
     </div>
 
     <div id="entry" class="page">
-      <label>Period & User</label>
-      <input type="month" id="monthSelect" onchange="initDates()">
       <div class="tabs">
         <div class="tab active" id="btn-miu" onclick="setUser('miu')">MIU</div>
         <div class="tab" id="btn-raya" onclick="setUser('raya')">RAYA</div>
@@ -127,103 +130,127 @@
       <div class="glass-card">
         <label>Shift Date</label>
         <select id="dateSelect" onchange="loadDay()"></select>
-        <label>Attendance</label>
-        <div class="status-pill-group">
-            <button class="status-btn active" id="stat-present" onclick="setStatus('Present')">PRESENT</button>
-            <button class="status-btn" id="stat-off" onclick="setStatus('Off-day')">OFF-DAY</button>
+        <div class="status-group">
+            <div class="status-opt active" id="s-pres" onclick="setStat('Present')">PRESENT</div>
+            <div class="status-opt" id="s-off" onclick="setStat('Off-day')">OFF-DAY</div>
         </div>
         <div id="otSection">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                <div>
-                    <label style="color:var(--accent)">Normal OT (1.5)</label>
-                    <div class="time-field-row">
-                        <div class="time-unit"><input type="number" id="nh" placeholder="H" inputmode="numeric"></div>
-                        <div class="time-unit"><input type="number" id="nm" placeholder="M" inputmode="numeric"></div>
-                    </div>
-                </div>
-                <div>
-                    <label style="color:var(--success)">Double OT (2.0)</label>
-                    <div class="time-field-row">
-                        <div class="time-unit"><input type="number" id="dh" placeholder="H" inputmode="numeric"></div>
-                        <div class="time-unit"><input type="number" id="dm" placeholder="M" inputmode="numeric"></div>
-                    </div>
-                </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div><label>Normal OT</label><input type="number" id="nh" placeholder="H" inputmode="numeric"><input type="number" id="nm" placeholder="M" inputmode="numeric"></div>
+                <div><label>Double OT</label><input type="number" id="dh" placeholder="H" inputmode="numeric"><input type="number" id="dm" placeholder="M" inputmode="numeric"></div>
             </div>
         </div>
-        <button class="btn" id="saveBtn" onclick="saveDay()" style="margin-top:25px">Confirm Entry</button>
+        <button class="btn" id="saveBtn" onclick="saveDay()">Save Daily Shift</button>
+      </div>
+      <div class="glass-card">
+        <label>Monthly Bonus Count (Lump Sum)</label>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div><label>Total 6th Days</label><input type="number" id="m6" placeholder="0" inputmode="numeric" onchange="saveMonthlyBonuses()"></div>
+            <div><label>Total Extras</label><input type="number" id="me" placeholder="0" inputmode="numeric" onchange="saveMonthlyBonuses()"></div>
+        </div>
       </div>
     </div>
 
-    <div id="slips" class="page">
+    <div id="spend" class="page">
         <div class="glass-card">
-            <label>Variable Bonuses</label>
-            <div style="display:flex; gap:12px">
-                <div style="flex:1"><label style="font-size:8px">6th Days</label><input type="number" id="b6" placeholder="0" style="margin:0"></div>
-                <div style="flex:1"><label style="font-size:8px">Extra Days</label><input type="number" id="be" placeholder="0" style="margin:0"></div>
+            <label>Add Expense</label>
+            <input type="text" id="exName" placeholder="Description">
+            <div style="display:flex; gap:10px;">
+                <input type="number" id="exAmt" placeholder="MVR" inputmode="numeric">
+                <select id="exCat" style="width:120px;">
+                    <option value="🏠">House</option>
+                    <option value="👩‍❤️‍👨">Couple</option>
+                    <option value="👤">Personal</option>
+                    <option value="⛽">Fuel</option>
+                    <option value="📦">Others</option>
+                </select>
             </div>
-            <button class="btn" onclick="saveBonus()" style="margin-top:15px; background: #2c2c2e; font-size: 13px; padding:12px;">Update Bonuses</button>
+            <button class="btn" onclick="addExpense()" style="background:var(--danger)">Confirm Expense</button>
         </div>
-        <div id="slipList"></div>
+    </div>
+
+    <div id="log" class="page">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <label id="logMonthLabel">Transactions</label>
+            <button onclick="nav('ledger')" style="background:none; border:none; color:var(--accent); font-size:11px; font-weight:800;">OPEN OVERVIEW ›</button>
+        </div>
+        <div id="logList" class="glass-card" style="padding: 10px 20px;"></div>
+    </div>
+
+    <div id="ledger" class="page">
+        <button class="btn sub" onclick="nav('log')" style="margin-bottom:15px;">‹ Back to Transaction Log</button>
+        <div id="ledgerList"></div>
     </div>
 
     <div id="rates" class="page">
         <div id="rateList"></div>
         <button class="btn" onclick="saveRates()">Update System Rates</button>
-        <button class="btn danger-outline" onclick="resetAllData()">Wipe Local Database</button>
+        
+        <div class="glass-card" style="margin-top:40px; border-color:var(--danger); background: rgba(255,69,58,0.05);">
+            <label style="color:var(--danger)">Danger Zone</label>
+            <p style="font-size:10px; color:var(--text-dim); margin-bottom:12px;">Wipe all shift logs and expense records for this month only. Base rates remain safe.</p>
+            <button class="btn" style="background:var(--danger); padding:10px; font-size:12px;" onclick="resetMonthlyData()">RESET ALL MONTHLY DATA</button>
+        </div>
     </div>
   </main>
 
   <nav>
     <button class="nav-btn active" onclick="nav('dash')"><i>📊</i>Dash</button>
     <button class="nav-btn" onclick="nav('entry')"><i>✏️</i>Entry</button>
-    <button class="nav-btn" onclick="nav('slips')"><i>🧾</i>Slips</button>
+    <button class="nav-btn" onclick="nav('spend')"><i>💸</i>Spend</button>
+    <button class="nav-btn" onclick="nav('log')"><i>📜</i>Log</button>
     <button class="nav-btn" onclick="nav('rates')"><i>⚙️</i>Rates</button>
   </nav>
 </div>
 
 <script>
 let curUser = 'miu';
+let curStat = 'Present';
 const users = ['miu', 'raya'];
 const rateDef = [
     {id:'basic', l:'Basic Salary', d:9990}, {id:'puncRate', l:'Punctuality', d:75},
     {id:'normalOtRate', l:'Normal OT', d:52.03}, {id:'doubleOtRate', l:'Double OT', d:62.44},
     {id:'fixedAllowance', l:'Fixed Allw', d:1300}, {id:'siteAllowance', l:'Site Allw', d:4000},
-    {id:'sixthDayRate', l:'6th Day Rate', d:374.63}, {id:'extraDayRate', l:'Extra Day Rate', d:166.50},
+    {id:'sixthDayRate', l:'6th Day Bonus', d:374.63}, {id:'extraDayRate', l:'Extra Day Bonus', d:166.50},
     {id:'pension', l:'Pension Deduct', d:-699.30}
 ];
 
 function nav(id) {
     document.querySelectorAll('.page, .nav-btn').forEach(el => el.classList.remove('active'));
     document.getElementById(id).classList.add('active');
-    if(event) event.currentTarget.classList.add('active');
-    if(id==='dash') calcDash();
-    if(id==='slips') { loadBonusInputs(); buildSlips(); }
+    const navBtn = document.querySelector(`.nav-btn[onclick="nav('${id}')"]`);
+    if(navBtn) navBtn.classList.add('active');
+    syncAll();
+    if(id === 'ledger') buildLedger();
 }
 
-function setUser(u) {
-    curUser = u;
-    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.id === 'btn-'+u));
-    loadDay();
+function syncAll() { initDates(); calcDash(); buildLog(); initRates(); }
+
+function refreshDash(btn) {
+    btn.style.transform = "rotate(360deg)";
+    syncAll();
+    setTimeout(() => btn.style.transform = "rotate(0deg)", 500);
 }
 
-function setStatus(status) {
-    document.getElementById('stat-present').classList.toggle('active', status === 'Present');
-    document.getElementById('stat-off').classList.toggle('active', status === 'Off-day');
-    document.getElementById('otSection').style.opacity = (status === 'Off-day') ? '0.2' : '1';
-    document.getElementById('otSection').style.pointerEvents = (status === 'Off-day') ? 'none' : 'auto';
+function setUser(u) { curUser = u; document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.id === 'btn-'+u)); loadDay(); }
+
+function setStat(s) {
+    curStat = s;
+    document.getElementById('s-pres').classList.toggle('active', s === 'Present');
+    document.getElementById('s-off').classList.toggle('active', s === 'Off-day');
+    document.getElementById('otSection').style.opacity = (s === 'Off-day') ? '0.3' : '1';
 }
 
 function initDates() {
-    const sel = document.getElementById('dateSelect');
-    sel.innerHTML = '';
+    const sel = document.getElementById('dateSelect'); 
     const val = document.getElementById('monthSelect').value;
-    if(!val) return;
+    if(!val || (sel.options.length > 0 && sel.dataset.m === val)) return;
+    sel.innerHTML = ''; sel.dataset.m = val;
     const [y, m] = val.split('-').map(Number);
     const s = new Date(y, m - 2, 21); const e = new Date(y, m - 1, 20);
     for (let d = new Date(s); d <= e; d.setDate(d.getDate() + 1)) {
-        const o = document.createElement('option');
-        o.value = d.toISOString().split('T')[0];
-        o.innerText = d.toLocaleDateString('en-GB', {weekday:'short', day:'2-digit', month:'short'});
+        const o = document.createElement('option'); o.value = d.toISOString().split('T')[0];
+        o.innerText = d.toLocaleDateString('en-GB', {day:'2-digit', month:'short', weekday:'short'});
         sel.appendChild(o);
     }
     loadDay();
@@ -232,108 +259,141 @@ function initDates() {
 function saveDay() {
     const m = document.getElementById('monthSelect').value;
     const d = document.getElementById('dateSelect').value;
-    const isPresent = document.getElementById('stat-present').classList.contains('active');
-    const data = JSON.parse(localStorage.getItem(`libey_v3_${m}`)) || {};
-    if(!data[curUser]) data[curUser] = { entries: {}, b6:0, be:0 };
-    data[curUser].entries[d] = {
-        s: isPresent ? 'Present' : 'Off-day', 
-        nh: document.getElementById('nh').value, nm: document.getElementById('nm').value,
-        dh: document.getElementById('dh').value, dm: document.getElementById('dm').value
-    };
-    localStorage.setItem(`libey_v3_${m}`, JSON.stringify(data));
-    const b = document.getElementById('saveBtn');
-    b.innerText = "SAVED ✓"; b.style.background = "var(--success)";
-    setTimeout(() => { b.innerText = "Confirm Entry"; b.style.background = "var(--accent)"; }, 1000);
+    const db = JSON.parse(localStorage.getItem(`libey_${m}`)) || {};
+    if(!db[curUser]) db[curUser] = { entries: {}, m6:0, me:0 };
+    db[curUser].entries[d] = { s: curStat, nh: document.getElementById('nh').value, nm: document.getElementById('nm').value, dh: document.getElementById('dh').value, dm: document.getElementById('dm').value };
+    localStorage.setItem(`libey_${m}`, JSON.stringify(db));
+    const b = document.getElementById('saveBtn'); b.innerText = "ENTRY SAVED";
+    setTimeout(() => b.innerText = "Save Daily Shift", 1000);
+}
+
+function saveMonthlyBonuses() {
+    const m = document.getElementById('monthSelect').value;
+    const db = JSON.parse(localStorage.getItem(`libey_${m}`)) || {};
+    if(!db[curUser]) db[curUser] = { entries: {}, m6:0, me:0 };
+    db[curUser].m6 = document.getElementById('m6').value;
+    db[curUser].me = document.getElementById('me').value;
+    localStorage.setItem(`libey_${m}`, JSON.stringify(db));
+    calcDash();
 }
 
 function loadDay() {
     const m = document.getElementById('monthSelect').value;
     const d = document.getElementById('dateSelect').value;
-    const data = JSON.parse(localStorage.getItem(`libey_v3_${m}`)) || {};
-    const entry = data[curUser]?.entries[d] || {s:'Present', nh:'', nm:'', dh:'', dm:''};
-    setStatus(entry.s);
-    document.getElementById('nh').value = entry.nh || '';
-    document.getElementById('nm').value = entry.nm || '';
-    document.getElementById('dh').value = entry.dh || '';
-    document.getElementById('dm').value = entry.dm || '';
+    const db = JSON.parse(localStorage.getItem(`libey_${m}`)) || {};
+    const entry = db[curUser]?.entries[d] || {s:'Present', nh:'', nm:'', dh:'', dm:''};
+    setStat(entry.s);
+    document.getElementById('nh').value = entry.nh; document.getElementById('nm').value = entry.nm;
+    document.getElementById('dh').value = entry.dh; document.getElementById('dm').value = entry.dm;
+    document.getElementById('m6').value = db[curUser]?.m6 || 0;
+    document.getElementById('me').value = db[curUser]?.me || 0;
 }
 
-function saveBonus() {
+function addExpense() {
     const m = document.getElementById('monthSelect').value;
-    const data = JSON.parse(localStorage.getItem(`libey_v3_${m}`)) || {};
-    if(!data[curUser]) data[curUser] = { entries: {} };
-    data[curUser].b6 = document.getElementById('b6').value;
-    data[curUser].be = document.getElementById('be').value;
-    localStorage.setItem(`libey_v3_${m}`, JSON.stringify(data));
-    alert("Bonuses Updated");
-}
-
-function loadBonusInputs() {
-    const m = document.getElementById('monthSelect').value;
-    const data = JSON.parse(localStorage.getItem(`libey_v3_${m}`)) || {};
-    document.getElementById('b6').value = data[curUser]?.b6 || 0;
-    document.getElementById('be').value = data[curUser]?.be || 0;
+    const name = document.getElementById('exName').value;
+    const amt = parseFloat(document.getElementById('exAmt').value);
+    if(!name || !amt) return;
+    const db = JSON.parse(localStorage.getItem(`libey_${m}`)) || {};
+    if(!db.expenses) db.expenses = [];
+    db.expenses.push({ name, amt, cat: document.getElementById('exCat').value, id: Date.now(), date: new Date().toLocaleDateString('en-GB', {day:'2-digit', month:'short'}) });
+    localStorage.setItem(`libey_${m}`, JSON.stringify(db));
+    document.getElementById('exName').value = ''; document.getElementById('exAmt').value = '';
+    alert("Expense Logged");
 }
 
 function getPay(u, m) {
     const rates = JSON.parse(localStorage.getItem(`r_${u}`)) || {};
-    const data = JSON.parse(localStorage.getItem(`libey_v3_${m}`)) || {};
-    const obj = data[u] || { entries: {} };
-    let pr = 0, nTotalH = 0, dTotalH = 0;
+    const db = JSON.parse(localStorage.getItem(`libey_${m}`)) || {};
+    const obj = db[u] || { entries: {}, m6:0, me:0 };
+    let dPres = 0, nH = 0, dH = 0;
     Object.values(obj.entries).forEach(e => {
-        if(e.s === 'Present') {
-            pr++;
-            nTotalH += (parseFloat(e.nh)||0) + (parseFloat(e.nm)||0)/60;
-            dTotalH += (parseFloat(e.dh)||0) + (parseFloat(e.dm)||0)/60;
-        }
+        if(e.s === 'Present') { dPres++; nH += (parseFloat(e.nh)||0) + (parseFloat(e.nm)||0)/60; dH += (parseFloat(e.dh)||0) + (parseFloat(e.dm)||0)/60; }
     });
-    const b6 = parseFloat(obj.b6)||0, be = parseFloat(obj.be)||0;
-    const nOTVal = nTotalH * (rates.normalOtRate||0);
-    const dOTVal = dTotalH * (rates.doubleOtRate||0);
-    const net = (rates.basic||0) + (pr*(rates.puncRate||0)) + nOTVal + dOTVal + (rates.fixedAllowance||0) + (rates.siteAllowance||0) + (b6*(rates.sixthDayRate||0)) + (be*(rates.extraDayRate||0)) + (rates.pension||0);
-    return {net, pr, nTotalH, dTotalH, nOTVal, dOTVal, rates, b6, be};
+    const net = (rates.basic||0) + (dPres*(rates.puncRate||0)) + (nH*(rates.normalOtRate||0)) + (dH*(rates.doubleOtRate||0)) + ((obj.m6||0)*(rates.sixthDayRate||0)) + ((obj.me||0)*(rates.extraDayRate||0)) + (rates.fixedAllowance||0) + (rates.siteAllowance||0) + (rates.pension||0);
+    return {net, dPres, nH, dH, m6: obj.m6, me: obj.me};
 }
 
-function buildSlips() {
+function buildLog() {
     const m = document.getElementById('monthSelect').value;
+    const db = JSON.parse(localStorage.getItem(`libey_${m}`)) || {};
+    let items = [];
+    users.forEach(u => { const p = getPay(u, m); if(p.net > 0) items.push({ type:'in', icon: u[0].toUpperCase(), name: `${u.toUpperCase()} Income`, sub: `${p.dPres} Active Days`, amt: p.net }); });
+    (db.expenses || []).forEach(x => { items.push({ type:'out', icon: x.cat, name: x.name, sub: x.date, amt: x.amt, id: x.id }); });
+    let h = "";
+    items.forEach(i => {
+        h += `<div class="log-item"><div class="log-info"><div class="log-icon">${i.icon}</div><div><div class="log-meta">${i.name}</div><div class="log-sub">${i.sub}</div></div></div><div class="log-amt ${i.type==='in'?'amt-in':'amt-out'}">${i.type==='in'?'+':'-'}${i.amt.toLocaleString()}</div></div>`;
+    });
+    document.getElementById('logList').innerHTML = h || "<div style='text-align:center; color:var(--text-dim); padding:15px;'>No activity log</div>";
+}
+
+function buildLedger() {
+    const m = document.getElementById('monthSelect').value;
+    const db = JSON.parse(localStorage.getItem(`libey_${m}`)) || {};
     let h = "";
     users.forEach(u => {
         const p = getPay(u, m);
-        const allw = (p.rates.fixedAllowance||0) + (p.rates.siteAllowance||0);
-        h += `
-        <div class="slip-paper">
-            <div style="text-align:center; padding-bottom:15px; border-bottom:1px solid #eee;">
-                <div style="font-weight:900; font-size:1.4rem;">${u.toUpperCase()}</div>
-                <div style="font-size:10px; color:#888;">${m}</div>
+        h += `<div class="glass-card" style="border-color:var(--accent)">
+            <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:15px;">
+                <div><label>${u.toUpperCase()} TOTAL SALARY</label><div class="salary-pill">${p.net.toLocaleString()} MVR</div></div>
+                <div style="text-align:right"><label>Present</label><div style="font-size:14px; font-weight:800;">${p.dPres} Days</div></div>
             </div>
-
-            <div class="slip-section-title">Standard</div>
-            <div class="slip-row"><span>Basic Salary</span><span>${(p.rates.basic||0).toFixed(2)}</span></div>
-            <div class="slip-row"><span>Fixed Allowances</span><span>${allw.toFixed(2)}</span></div>
-            <div class="slip-row"><span>Punctuality (${p.pr})</span><span>${(p.pr*(p.rates.puncRate||0)).toFixed(2)}</span></div>
-
-            <div class="slip-section-title">Overtime</div>
-            <div class="slip-row"><span>Normal OT (1.5x)</span><span>${p.nOTVal.toFixed(2)}</span></div>
-            <div class="slip-row sub"><span>${p.nTotalH.toFixed(2)} hrs @ ${p.rates.normalOtRate}</span></div>
-            <div class="slip-row"><span>Double OT (2.0x)</span><span>${p.dOTVal.toFixed(2)}</span></div>
-            <div class="slip-row sub"><span>${p.dTotalH.toFixed(2)} hrs @ ${p.rates.doubleOtRate}</span></div>
-
-            <div class="slip-section-title">Adjustments</div>
-            <div class="slip-row"><span>6th Day / Extra</span><span>${((p.b6*(p.rates.sixthDayRate||0))+(p.be*(p.rates.extraDayRate||0))).toFixed(2)}</span></div>
-            <div class="slip-row" style="color:#c00;"><span>Pension</span><span>${(p.rates.pension||0).toFixed(2)}</span></div>
-
-            <div class="total-row"><span>NET PAY</span><span>${p.net.toLocaleString(undefined,{minimumFractionDigits:2})}</span></div>
+            <div class="ledger-stats">
+                <div class="ledger-stat-box"><label>OT Accumulation</label><div>Norm: ${p.nH.toFixed(1)}h<br>Doub: ${p.dH.toFixed(1)}h</div></div>
+                <div class="ledger-stat-box"><label>Monthly Bonuses</label><div>6th: ${p.m6}<br>Ext: ${p.me}</div></div>
+            </div>
+            <label>Shift Logs (Tap to edit)</label>`;
+        const entries = db[u]?.entries || {};
+        Object.keys(entries).sort().forEach(d => {
+            const e = entries[d];
+            h += `<div class="log-item" onclick="jumpEdit('${d}', '${u}')">
+                <div class="log-info"><div><div class="log-meta">${d.split('-').slice(2)} ${new Date(d).toLocaleString('en-GB',{month:'short'})}</div><div class="log-sub">${e.s}</div></div></div>
+                <div class="log-sub" style="text-align:right">OT: ${((parseFloat(e.nh)||0) + (parseFloat(e.dh)||0)).toFixed(1)}h</div>
+            </div>`;
+        });
+        h += `</div>`;
+    });
+    h += `<div class="glass-card" style="border-color:var(--danger)"><label>Expense History</label>`;
+    (db.expenses || []).forEach(x => {
+        h += `<div class="log-item">
+            <div class="log-info"><div class="log-icon">${x.cat}</div><div><div class="log-meta">${x.name}</div><div class="log-sub">${x.date}</div></div></div>
+            <div style="text-align:right"><div class="log-amt amt-out">-${x.amt}</div><div onclick="delLedgerExp(${x.id})" style="font-size:9px; color:var(--danger)">DELETE</div></div>
         </div>`;
     });
-    document.getElementById('slipList').innerHTML = h;
+    document.getElementById('ledgerList').innerHTML = h + `</div>`;
+}
+
+function jumpEdit(date, user) { setUser(user); document.getElementById('dateSelect').value = date; loadDay(); nav('entry'); }
+
+function delLedgerExp(id) {
+    const m = document.getElementById('monthSelect').value;
+    const db = JSON.parse(localStorage.getItem(`libey_${m}`));
+    db.expenses = db.expenses.filter(x => x.id != id);
+    localStorage.setItem(`libey_${m}`, JSON.stringify(db));
+    buildLedger(); calcDash();
+}
+
+function resetMonthlyData() {
+    const m = document.getElementById('monthSelect').value;
+    if(confirm(`Wipe all shift data and expenses for ${m}? System rates will be kept.`)) {
+        localStorage.removeItem(`libey_${m}`);
+        syncAll();
+        alert("Reset complete.");
+        nav('dash');
+    }
 }
 
 function calcDash() {
     const m = document.getElementById('monthSelect').value;
     const p1 = getPay('miu', m); const p2 = getPay('raya', m);
-    document.getElementById('miuNet').innerText = p1.net.toLocaleString(undefined,{minimumFractionDigits:2});
-    document.getElementById('rayaNet').innerText = p2.net.toLocaleString(undefined,{minimumFractionDigits:2});
-    document.getElementById('totalDisplay').innerText = (p1.net + p2.net).toLocaleString(undefined,{minimumFractionDigits:2});
+    const db = JSON.parse(localStorage.getItem(`libey_${m}`)) || {};
+    const exp = (db.expenses || []).reduce((sum, x) => sum + x.amt, 0);
+    const total = p1.net + p2.net;
+    document.getElementById('miuNet').innerText = p1.net.toLocaleString();
+    document.getElementById('rayaNet').innerText = p2.net.toLocaleString();
+    document.getElementById('dashExp').innerText = exp.toLocaleString();
+    document.getElementById('totalEarnedLabel').innerText = `Combined Gross: ${total.toLocaleString()}`;
+    document.getElementById('walletDisplay').innerText = (total - exp).toLocaleString(undefined, {minimumFractionDigits:2});
 }
 
 function initRates() {
@@ -342,11 +402,8 @@ function initRates() {
         let h = `<div class="glass-card"><label>${u.toUpperCase()} Base Rates</label>`;
         const s = JSON.parse(localStorage.getItem(`r_${u}`)) || {};
         rateDef.forEach(f => {
-            const val = s[f.id] !== undefined ? s[f.id] : f.d;
-            h += `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                <span style="font-size:12px; color:var(--text-dim);">${f.l}</span>
-                <input type="number" class="r-in" data-u="${u}" data-k="${f.id}" value="${val}" style="width:100px; margin:0; padding:10px; background:#000; border-radius:12px; font-size:14px;">
-            </div>`;
+            h += `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;"><span style="font-size:12px; color:var(--text-dim)">${f.l}</span>
+            <input type="number" class="r-in" data-u="${u}" data-k="${f.id}" value="${s[f.id]||f.d}" style="width:100px; margin:0; padding:10px;"></div>`;
         });
         con.innerHTML += h + `</div>`;
     });
@@ -357,15 +414,11 @@ function saveRates() {
         const d = {}; document.querySelectorAll(`.r-in[data-u="${u}"]`).forEach(i => d[i.dataset.k] = parseFloat(i.value));
         localStorage.setItem(`r_${u}`, JSON.stringify(d));
     });
-    alert("Rates Saved");
+    alert("Rates updated successfully."); syncAll();
 }
 
-function resetAllData() {
-    if(confirm("Permanently wipe all database history?")) { localStorage.clear(); location.reload(); }
-}
-
-document.getElementById('monthSelect').value = new Date().toISOString().slice(0, 7);
-initRates(); initDates(); calcDash();
+const now = new Date(); document.getElementById('monthSelect').value = now.toISOString().slice(0, 7);
+syncAll();
 </script>
 </body>
 </html>
