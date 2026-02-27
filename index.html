@@ -20,10 +20,10 @@
         }
 
         body.theme-bml {
-            --bg: #fff; --accent: #ed1c24; --text: #000; --dim: #666;
-            --border: rgba(0, 0, 0, .08); --card-bg: #fff; --nav-bg: rgba(245,245,245,0.9);
-            --input-bg: #f2f2f2; --header-bg: #ed1c24; --success: #27ae60;
-            --logo-display: inline-block;
+            --bg: #f9f9f9; --accent: #ed1c24; --text: #000; --dim: #666;
+            --border: rgba(0, 0, 0, .08); --card-bg: #fff; --nav-bg: rgba(245,245,245,0.95);
+            --input-bg: #efeff4; --header-bg: #ed1c24; --success: #27ae60;
+            --logo-display: block;
         }
         body.theme-bml header .brand, body.theme-bml header #monthPicker { color: #fff !important; }
 
@@ -35,13 +35,26 @@
         }
         
         header { padding: 55px 22px 15px; display: flex; justify-content: space-between; align-items: center; background: var(--header-bg); transition: background 0.3s; }
-        .brand { font-weight: 800; font-size: 1.5rem; letter-spacing: -0.5px; color: var(--accent); display: flex; align-items: center; gap: 8px; }
+        .brand { font-weight: 800; font-size: 1.4rem; letter-spacing: -0.5px; color: var(--accent); display: flex; align-items: center; gap: 10px; }
         
-        .bml-logo { 
+        /* BML Dhoni Logo */
+        .dhoni-icon {
             display: var(--logo-display);
-            width: 24px; height: 24px; 
-            background: #fff; 
-            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            width: 32px; height: 32px;
+            border: 2px solid white;
+            position: relative;
+        }
+        .dhoni-icon::before {
+            content: ''; position: absolute; top: 4px; left: 8px;
+            width: 0; height: 0;
+            border-left: 10px solid transparent;
+            border-bottom: 15px solid white;
+            clip-path: polygon(100% 0, 0% 100%, 100% 100%);
+        }
+        .dhoni-icon::after {
+            content: ''; position: absolute; bottom: 6px; left: 4px;
+            width: 20px; height: 3px; background: white;
+            border-radius: 0 0 2px 2px;
         }
 
         main { padding: 15px 20px 150px; overflow-y: auto; height: calc(100vh - 80px); -webkit-overflow-scrolling: touch; }
@@ -49,17 +62,16 @@
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .card { background: var(--card-bg); border-radius: 22px; padding: 20px; margin-bottom: 16px; border: 1px solid var(--border); }
+        .card { background: var(--card-bg); border-radius: 22px; padding: 20px; margin-bottom: 16px; border: 1px solid var(--border); box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
         label { font-size: 10px; color: var(--dim); font-weight: 700; text-transform: uppercase; margin-bottom: 8px; display: block; }
         
         input, select { 
-            width: 100%; height: 50px; padding: 0 14px; border-radius: 14px; 
+            width: 100% !important; height: 50px; padding: 0 14px; border-radius: 14px; 
             border: 1px solid var(--border); background: var(--input-bg); color: var(--text); 
             margin-bottom: 16px; font-size: 16px; outline: none; display: block;
-            box-sizing: border-box;
+            box-sizing: border-box; -webkit-appearance: none;
         }
-        /* iOS Date Input Fix */
-        input[type="date"] { min-width: 100%; -webkit-appearance: none; }
+        input[type="date"] { min-width: 100%; }
 
         .btn { width: 100%; padding: 16px; border-radius: 16px; border: none; font-weight: 800; background: var(--accent); color: #fff; font-size: 16px; }
         .btn:active { opacity: 0.8; transform: scale(0.98); }
@@ -76,17 +88,20 @@
         
         .stat-row { display: flex; justify-content: space-between; margin-top: 12px; border-top: 1px solid var(--border); padding-top: 12px; gap: 15px; }
         .progress-bg { height: 10px; background: var(--input-bg); border-radius: 5px; margin: 15px 0; overflow: hidden; }
-        #progress-fill { height: 100%; width: 0%; background: var(--accent); transition: width 0.6s ease; }
+        #progress-fill { height: 100%; width: 0%; background: var(--accent); transition: width 0.6s cubic-bezier(0.1, 0, 0.3, 1); }
         
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 99; padding: 20px; }
-        .theme-dot { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #888; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #fff; font-weight: bold; }
+        .theme-dot { width: 50px; height: 50px; border-radius: 14px; border: 2px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="brand"><div class="bml-logo"></div>LIBEYVARU</div>
-        <input type="month" id="monthPicker" style="margin:0; width:auto; height:auto; background:transparent; border:none; color:var(--accent); font-weight:700">
+        <div class="brand">
+            <div class="dhoni-icon"></div>
+            LIBEYVARU
+        </div>
+        <input type="month" id="monthPicker" style="margin:0; width:auto !important; height:auto; background:transparent; border:none; color:var(--accent); font-weight:700">
     </header>
 
     <main>
@@ -109,55 +124,49 @@
                 <div id="monthBalance" style="font-size: 2rem; font-weight: 800; color:#fff">0</div>
                 <div class="stat-row" style="border-top-color: rgba(255,255,255,0.2)">
                     <div class="stat-box"><label style="color:rgba(255,255,255,0.6)">Spent</label><div id="monthOutDash" style="color:#fff; font-weight:700">0</div></div>
-                    <div class="stat-box"><label style="color:rgba(255,255,255,0.6)">All-Time</label><div id="lifeBalance" style="color:#fff; font-weight:700">0</div></div>
+                    <div class="stat-box"><label style="color:rgba(255,255,255,0.6)">Balance</label><div id="lifeBalance" style="color:#fff; font-weight:700">0</div></div>
                 </div>
             </div>
             
             <div class="card">
-                <label>Lifetime Summary</label>
+                <label>Lifetime Totals</label>
                 <div class="stat-row" style="border:none; padding:0">
-                    <div class="stat-box"><label>Total Income</label><div id="lifeIn" style="color:var(--success); font-weight:700">0</div></div>
-                    <div class="stat-box"><label>Total Expense</label><div id="lifeOut" style="color:var(--danger); font-weight:700">0</div></div>
+                    <div class="stat-box"><label>In</label><div id="lifeIn" style="color:var(--success); font-weight:700">0</div></div>
+                    <div class="stat-box"><label>Out</label><div id="lifeOut" style="color:var(--danger); font-weight:700">0</div></div>
                 </div>
             </div>
         </div>
 
         <div id="add" class="page">
             <div class="card">
-                <label>Transaction Date</label>
+                <label>Date</label>
                 <input type="date" id="addDate">
-                
                 <label>Person</label>
                 <select id="person"><option>MIU</option><option>RAYA</option><option>BOTH</option></select>
-                
-                <label>Entry Type</label>
+                <label>Type</label>
                 <select id="type" onchange="loadCats('cat', this.value)"><option value="out">Expense</option><option value="in">Income</option></select>
-                
                 <label>Category</label>
                 <select id="cat"></select>
-                
                 <label>Description</label>
-                <input id="desc" placeholder="What was it for?">
-                
+                <input id="desc" placeholder="Details...">
                 <label>Amount (MVR)</label>
                 <input id="amt" type="number" inputmode="decimal">
-                
-                <button class="btn" onclick="saveEntry()">Save Transaction</button>
+                <button class="btn" onclick="saveEntry()">Add Entry</button>
             </div>
         </div>
 
         <div id="log" class="page">
-            <input type="text" id="logSearch" placeholder="Search logs..." oninput="refresh()">
+            <input type="text" id="logSearch" placeholder="Search..." oninput="refresh()">
             <div id="logList" class="card"></div>
         </div>
 
         <div id="settings" class="page">
             <div class="card">
-                <label>Select Appearance</label>
-                <div style="display:flex; gap:20px; padding:10px 0">
-                    <div class="theme-dot" style="background:#000" onclick="setTheme('dark')">OLED</div>
-                    <div class="theme-dot" style="background:#fff; color:#000" onclick="setTheme('light')">Light</div>
-                    <div class="theme-dot" style="background:#ed1c24" onclick="setTheme('bml')">BML</div>
+                <label>Appearance</label>
+                <div style="display:flex; gap:12px; padding:10px 0">
+                    <div class="theme-dot" style="background:#000; color:#fff" onclick="setTheme('dark')">OLED</div>
+                    <div class="theme-dot" style="background:#fff; color:#000" onclick="setTheme('light')">LIGHT</div>
+                    <div class="theme-dot" style="background:#ed1c24; color:#fff; border-color:#ed1c24" onclick="setTheme('bml')">BML</div>
                 </div>
             </div>
             <div class="card">
@@ -166,8 +175,8 @@
                 <button class="btn" onclick="saveBudget()">Save Budget</button>
             </div>
             <div class="card" style="border-color: var(--danger)">
-                <label style="color: var(--danger)">Zone of No Return</label>
-                <button class="btn" style="background: var(--danger)" onclick="resetMonth()">Delete Current Month</button>
+                <label style="color: var(--danger)">Management</label>
+                <button class="btn" style="background: var(--danger)" onclick="resetMonth()">Reset Month Data</button>
             </div>
         </div>
     </main>
@@ -214,7 +223,7 @@
         }
 
         function saveEntry() {
-            if (!amt.value || amt.value <= 0) return alert("Please enter amount");
+            if (!amt.value || amt.value <= 0) return alert("Enter amount");
             const key = `lib_${addDate.value.slice(0, 7)}`;
             const db = JSON.parse(localStorage.getItem(key)) || [];
             db.push({ id: Date.now(), date: addDate.value, person: person.value, type: type.value, cat: cat.value, desc: desc.value, amt: parseFloat(amt.value) });
@@ -306,8 +315,8 @@
                     <select id="ec"></select>
                     <input id="edes" value="${e.desc}">
                     <input id="ea" type="number" value="${e.amt}">
-                    <button class="btn" onclick="saveEdit(${id}, '${date}')">Apply Changes</button>
-                    <button class="btn" style="background:none; color:var(--danger); margin-top:10px" onclick="delEntry(${id}, '${date}')">Delete Entry</button>
+                    <button class="btn" onclick="saveEdit(${id}, '${date}')">Save Changes</button>
+                    <button class="btn" style="background:none; color:var(--danger); margin-top:10px" onclick="delEntry(${id}, '${date}')">Delete</button>
                 </div>`;
             loadCats('ec', e.type); document.getElementById('ec').value = e.cat;
         }
@@ -327,7 +336,7 @@
         }
 
         function delEntry(id, date) {
-            if(confirm("Permanently delete?")) {
+            if(confirm("Delete?")) {
                 let k = `lib_${date.slice(0, 7)}`;
                 localStorage.setItem(k, JSON.stringify(JSON.parse(localStorage.getItem(k)).filter(x => x.id !== id)));
                 editModal.style.display = 'none'; refresh();
@@ -335,7 +344,7 @@
         }
 
         function resetMonth() {
-            if(confirm("Clear this month?")) { 
+            if(confirm("Clear this month's data?")) { 
                 localStorage.removeItem(`lib_${monthPicker.value}`); 
                 localStorage.removeItem(`budget_${monthPicker.value}`);
                 refresh(); 
