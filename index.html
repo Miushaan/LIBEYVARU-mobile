@@ -1,357 +1,361 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>LIBEYVARU by Miu</title>
-    <style>
-        :root {
-            --bg: #000; --accent: #0a84ff; --text: #fff; --dim: #9a9aa1;
-            --border: rgba(255, 255, 255, .12); --success: #32d74b; --danger: #ff453a;
-            --warning: #ff9500; --card-bg: #1c1c1e; --nav-bg: rgba(28,28,30,0.85);
-            --input-bg: #2c2c2e; --header-bg: #000; --logo-display: none;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>LIBEYVARU</title>
+<style>
+:root{--bg:#f2f2f7;--accent:#007aff;--text:#000;--dim:#8e8e93;--border:rgba(0,0,0,.1);--success:#34c759;--danger:#ff3b30;--card-bg:#fff;--nav-bg:rgba(255,255,255,.9);--input-bg:#e5e5ea;--header-bg:#f2f2f7}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,sans-serif;height:100vh;overflow:hidden}
+header{padding:55px 22px 15px;display:flex;justify-content:space-between;align-items:center;background:var(--header-bg)}
+.brand{font-weight:800;font-size:1.4rem;color:var(--accent)}
+main{padding:15px 20px 150px;overflow-y:auto;height:calc(100vh - 80px)}
+.page{display:none}.page.active{display:block}
+.card{background:var(--card-bg);border-radius:22px;padding:20px;margin-bottom:16px;border:1px solid var(--border)}
+label{font-size:10px;color:var(--dim);font-weight:700;text-transform:uppercase;margin-bottom:6px;display:block}
+input,select{width:100%;height:48px;padding:0 14px;border-radius:14px;border:1px solid var(--border);background:var(--input-bg);color:var(--text);margin-bottom:14px;font-size:15px}
+.btn{width:100%;padding:15px;border-radius:16px;border:none;font-weight:800;background:var(--accent);color:#fff;font-size:16px;margin-bottom:6px;cursor:pointer}
+.nav-btn{background:none;border:none;color:var(--dim);display:flex;flex-direction:column;align-items:center;font-size:10px;font-weight:700}
+.nav-btn span{font-size:20px;margin-bottom:4px}
+.nav-btn.active{color:var(--accent)}
+nav{position:fixed;bottom:30px;left:18px;right:18px;height:75px;background:var(--nav-bg);backdrop-filter:blur(20px);border-radius:24px;display:flex;justify-content:space-around;align-items:center;border:1px solid var(--border);z-index:100}
+.log-item{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.amt-in{color:var(--success);font-weight:800}.amt-out{color:var(--danger);font-weight:800}
+.date-head{font-size:11px;color:var(--accent);margin:18px 0 8px;font-weight:700}
+.progress-bg{height:10px;background:var(--input-bg);border-radius:5px;margin:15px 0;overflow:hidden}
+#progress-fill{height:100%;width:0%;background:var(--accent);transition:width 0.3s}
 
-        body.theme-light {
-            --bg: #f2f2f7; --accent: #007aff; --text: #000; --dim: #8e8e93;
-            --border: rgba(0, 0, 0, .1); --card-bg: #fff; --nav-bg: rgba(255,255,255,0.8);
-            --input-bg: #e5e5ea; --header-bg: #f2f2f7;
-        }
-
-        body.theme-bml {
-            --bg: #f9f9f9; --accent: #ed1c24; --text: #000; --dim: #666;
-            --border: rgba(0, 0, 0, .08); --card-bg: #fff; --nav-bg: rgba(245,245,245,0.95);
-            --input-bg: #efeff4; --header-bg: #ed1c24; --success: #27ae60;
-            --logo-display: block;
-        }
-        body.theme-bml header .brand, body.theme-bml header #monthPicker { color: #fff !important; }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        body { 
-            background: var(--bg); color: var(--text); 
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; 
-            height: 100vh; overflow: hidden; transition: background 0.3s;
-        }
-        
-        header { padding: 55px 22px 15px; display: flex; justify-content: space-between; align-items: center; background: var(--header-bg); transition: background 0.3s; }
-        .brand { font-weight: 800; font-size: 1.4rem; letter-spacing: -0.5px; color: var(--accent); display: flex; align-items: center; gap: 10px; }
-        
-        /* BML Dhoni Logo */
-        .dhoni-icon {
-            display: var(--logo-display);
-            width: 32px; height: 32px;
-            border: 2px solid white;
-            position: relative;
-        }
-        .dhoni-icon::before {
-            content: ''; position: absolute; top: 4px; left: 8px;
-            width: 0; height: 0;
-            border-left: 10px solid transparent;
-            border-bottom: 15px solid white;
-            clip-path: polygon(100% 0, 0% 100%, 100% 100%);
-        }
-        .dhoni-icon::after {
-            content: ''; position: absolute; bottom: 6px; left: 4px;
-            width: 20px; height: 3px; background: white;
-            border-radius: 0 0 2px 2px;
-        }
-
-        main { padding: 15px 20px 150px; overflow-y: auto; height: calc(100vh - 80px); -webkit-overflow-scrolling: touch; }
-        .page { display: none; animation: fadeIn 0.2s ease; }
-        .page.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .card { background: var(--card-bg); border-radius: 22px; padding: 20px; margin-bottom: 16px; border: 1px solid var(--border); box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
-        label { font-size: 10px; color: var(--dim); font-weight: 700; text-transform: uppercase; margin-bottom: 8px; display: block; }
-        
-        input, select { 
-            width: 100% !important; height: 50px; padding: 0 14px; border-radius: 14px; 
-            border: 1px solid var(--border); background: var(--input-bg); color: var(--text); 
-            margin-bottom: 16px; font-size: 16px; outline: none; display: block;
-            box-sizing: border-box; -webkit-appearance: none;
-        }
-        input[type="date"] { min-width: 100%; }
-
-        .btn { width: 100%; padding: 16px; border-radius: 16px; border: none; font-weight: 800; background: var(--accent); color: #fff; font-size: 16px; }
-        .btn:active { opacity: 0.8; transform: scale(0.98); }
-
-        nav { position: fixed; bottom: 30px; left: 18px; right: 18px; height: 75px; background: var(--nav-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 24px; display: flex; justify-content: space-around; align-items: center; border: 1px solid var(--border); z-index: 10; }
-        .nav-btn { background: none; border: none; color: var(--dim); display: flex; flex-direction: column; align-items: center; font-size: 10px; font-weight: 700; }
-        .nav-btn span { font-size: 20px; margin-bottom: 4px; }
-        .nav-btn.active { color: var(--accent); }
-
-        .log-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); }
-        .amt-in { color: var(--success); font-weight: 800; }
-        .amt-out { color: var(--danger); font-weight: 800; }
-        .date-head { font-size: 11px; color: var(--accent); margin: 18px 0 8px; font-weight: 700; }
-        
-        .stat-row { display: flex; justify-content: space-between; margin-top: 12px; border-top: 1px solid var(--border); padding-top: 12px; gap: 15px; }
-        .progress-bg { height: 10px; background: var(--input-bg); border-radius: 5px; margin: 15px 0; overflow: hidden; }
-        #progress-fill { height: 100%; width: 0%; background: var(--accent); transition: width 0.6s cubic-bezier(0.1, 0, 0.3, 1); }
-        
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 99; padding: 20px; }
-        .theme-dot { width: 50px; height: 50px; border-radius: 14px; border: 2px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; }
-    </style>
+/* Category Management Styles */
+.cat-list { margin-bottom: 15px; max-height: 200px; overflow-y: auto; }
+.cat-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: var(--bg); border-radius: 12px; margin-bottom: 6px; font-weight: 600; font-size: 14px; }
+.cat-del-btn { background: var(--danger); color: white; border: none; border-radius: 8px; padding: 4px 10px; font-size: 10px; font-weight: 800; }
+</style>
 </head>
 <body>
+<header>
+    <div class="brand">LIBEYVARU</div>
+    <input type="month" id="monthPicker" style="margin:0;width:auto;background:transparent;border:none;color:var(--accent);font-weight:700">
+</header>
 
-    <header>
-        <div class="brand">
-            <div class="dhoni-icon"></div>
-            LIBEYVARU
-        </div>
-        <input type="month" id="monthPicker" style="margin:0; width:auto !important; height:auto; background:transparent; border:none; color:var(--accent); font-weight:700">
-    </header>
-
-    <main>
-        <div id="dash" class="page active">
-            <div class="card">
-                <div style="display:flex; justify-content:space-between"><label>Budget Progress</label><span id="budgetRec" style="font-size:9px; color:var(--warning)" onclick="setRec()"></span></div>
-                <div style="display:flex; justify-content:space-between; align-items:flex-end">
-                    <div id="remaining" style="font-size:2.2rem; font-weight:800">0</div>
-                    <div style="font-size:11px; color:var(--dim); margin-bottom:8px">MVR LEFT</div>
-                </div>
-                <div class="progress-bg"><div id="progress-fill"></div></div>
-                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600">
-                    <span style="color:var(--dim)">LIMIT: <span id="limitDisp" style="color:var(--text)">0</span></span>
-                    <span id="percentDisp" style="color:var(--accent)">0%</span>
-                </div>
+<main>
+    <div id="dash" class="page active">
+        <div class="card">
+            <label>Budget Progress</label>
+            <div style="display:flex;justify-content:space-between;align-items:flex-end">
+                <div id="remaining" style="font-size:2rem;font-weight:800">0</div>
+                <div style="font-size:11px;color:var(--dim)">MVR LEFT</div>
             </div>
-
-            <div class="card" style="background: var(--accent); border: none;">
-                <label id="monthlyLabel" style="color: rgba(255,255,255,0.8)">Monthly Net</label>
-                <div id="monthBalance" style="font-size: 2rem; font-weight: 800; color:#fff">0</div>
-                <div class="stat-row" style="border-top-color: rgba(255,255,255,0.2)">
-                    <div class="stat-box"><label style="color:rgba(255,255,255,0.6)">Spent</label><div id="monthOutDash" style="color:#fff; font-weight:700">0</div></div>
-                    <div class="stat-box"><label style="color:rgba(255,255,255,0.6)">Balance</label><div id="lifeBalance" style="color:#fff; font-weight:700">0</div></div>
-                </div>
-            </div>
-            
-            <div class="card">
-                <label>Lifetime Totals</label>
-                <div class="stat-row" style="border:none; padding:0">
-                    <div class="stat-box"><label>In</label><div id="lifeIn" style="color:var(--success); font-weight:700">0</div></div>
-                    <div class="stat-box"><label>Out</label><div id="lifeOut" style="color:var(--danger); font-weight:700">0</div></div>
-                </div>
+            <div class="progress-bg"><div id="progress-fill"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600">
+                <span>LIMIT: <b id="limitDisp">0</b></span>
+                <span id="percentDisp">0%</span>
             </div>
         </div>
-
-        <div id="add" class="page">
-            <div class="card">
-                <label>Date</label>
-                <input type="date" id="addDate">
-                <label>Person</label>
-                <select id="person"><option>MIU</option><option>RAYA</option><option>BOTH</option></select>
-                <label>Type</label>
-                <select id="type" onchange="loadCats('cat', this.value)"><option value="out">Expense</option><option value="in">Income</option></select>
-                <label>Category</label>
-                <select id="cat"></select>
-                <label>Description</label>
-                <input id="desc" placeholder="Details...">
-                <label>Amount (MVR)</label>
-                <input id="amt" type="number" inputmode="decimal">
-                <button class="btn" onclick="saveEntry()">Add Entry</button>
+        <div class="card" style="background:var(--accent);border:none">
+            <label style="color:rgba(255,255,255,.7)">Monthly Net</label>
+            <div id="monthBalance" style="font-size:2rem;font-weight:800;color:#fff">0</div>
+        </div>
+        <div class="card">
+            <label>Lifetime Totals</label>
+            <div style="display:flex;justify-content:space-between">
+                <div><small>In</small><div id="lifeIn" style="color:var(--success);font-weight:700">0</div></div>
+                <div><small>Out</small><div id="lifeOut" style="color:var(--danger);font-weight:700">0</div></div>
+                <div><small>Balance</small><div id="lifeBalance" style="font-weight:700">0</div></div>
             </div>
         </div>
+    </div>
 
-        <div id="log" class="page">
-            <input type="text" id="logSearch" placeholder="Search..." oninput="refresh()">
-            <div id="logList" class="card"></div>
+    <div id="add" class="page">
+        <div class="card">
+            <label>Date</label><input type="date" id="addDate">
+            <label>Person</label><select id="person"><option>MIU</option><option>RAYA</option><option>BOTH</option></select>
+            <label>Type</label><select id="type" onchange="updateCatDropdown()"><option value="out">Expense</option><option value="in">Income</option></select>
+            <label>Category</label><select id="cat"></select>
+            <label>Description</label><input id="desc" placeholder="Note...">
+            <label>Amount (MVR)</label><input id="amt" type="number" inputmode="decimal">
+            <button class="btn" id="addBtn">Add Entry</button>
+        </div>
+    </div>
+
+    <div id="log" class="page">
+        <input type="text" id="logSearch" placeholder="Search transactions..." style="margin-bottom:10px">
+        <div id="logList"></div>
+    </div>
+
+    <div id="settings" class="page">
+        <div class="card">
+            <label>Monthly Budget</label>
+            <input type="number" id="budgetInput">
+            <button class="btn" onclick="saveBudget()">Save Budget</button>
         </div>
 
-        <div id="settings" class="page">
-            <div class="card">
-                <label>Appearance</label>
-                <div style="display:flex; gap:12px; padding:10px 0">
-                    <div class="theme-dot" style="background:#000; color:#fff" onclick="setTheme('dark')">OLED</div>
-                    <div class="theme-dot" style="background:#fff; color:#000" onclick="setTheme('light')">LIGHT</div>
-                    <div class="theme-dot" style="background:#ed1c24; color:#fff; border-color:#ed1c24" onclick="setTheme('bml')">BML</div>
-                </div>
-            </div>
-            <div class="card">
-                <label>Monthly Budget Limit</label>
-                <input type="number" id="budgetInput">
-                <button class="btn" onclick="saveBudget()">Save Budget</button>
-            </div>
-            <div class="card" style="border-color: var(--danger)">
-                <label style="color: var(--danger)">Management</label>
-                <button class="btn" style="background: var(--danger)" onclick="resetMonth()">Reset Month Data</button>
-            </div>
+        <div class="card">
+            <label>Manage Expense Categories</label>
+            <div id="expCatList" class="cat-list"></div>
+            <button class="btn" style="background:#555" onclick="addNewCategory('out')">+ Add Expense Category</button>
         </div>
-    </main>
 
-    <nav>
-        <button class="nav-btn active" onclick="nav('dash', this)"><span>📊</span>Dash</button>
-        <button class="nav-btn" onclick="nav('add', this)"><span>➕</span>Add</button>
-        <button class="nav-btn" onclick="nav('log', this)"><span>📜</span>Log</button>
-        <button class="nav-btn" onclick="nav('settings', this)"><span>⚙️</span>Settings</button>
-    </nav>
+        <div class="card">
+            <label>Manage Income Categories</label>
+            <div id="incCatList" class="cat-list"></div>
+            <button class="btn" style="background:#555" onclick="addNewCategory('in')">+ Add Income Category</button>
+        </div>
 
-    <div class="modal" id="editModal" onclick="if(event.target.id=='editModal') this.style.display='none'"><div id="modalContent" style="width: 100%;"></div></div>
+        <div class="card" style="border-color:var(--danger)">
+            <label style="color:var(--danger)">Danger Zone</label>
+            <button class="btn" style="background:var(--danger)" id="resetBtn">Reset Month</button>
+        </div>
+    </div>
+</main>
 
-    <script>
-        const incomeCats = ["Salary", "Other Income", "Gift"];
-        const expenseCats = ["Rent", "Bill", "Groceries", "Personal", "Cosmetics", "Repairs", "Fuel", "Eating Out"];
+<nav>
+    <button class="nav-btn active" data-page="dash"><span>📊</span>Dash</button>
+    <button class="nav-btn" data-page="add"><span>➕</span>Add</button>
+    <button class="nav-btn" data-page="log"><span>📜</span>Log</button>
+    <button class="nav-btn" data-page="settings"><span>⚙️</span>Settings</button>
+</nav>
 
-        function setTheme(theme) {
-            document.body.className = theme === 'dark' ? '' : 'theme-' + theme;
-            localStorage.setItem('lib_theme', theme);
+<script>
+// Default categories
+const DEFAULT_EXP = ["Rent", "Bills", "Groceries", "Dining", "Fuel", "Shopping", "Repairs"];
+const DEFAULT_INC = ["Salary", "Business", "Gift", "Refund"];
+
+const $ = id => document.getElementById(id);
+
+// --- CATEGORY LOGIC ---
+function getCategories(type) {
+    const key = type === 'in' ? 'lib_cats_in' : 'lib_cats_out';
+    let cats = JSON.parse(localStorage.getItem(key));
+    if (!cats) {
+        cats = type === 'in' ? DEFAULT_INC : DEFAULT_EXP;
+        localStorage.setItem(key, JSON.stringify(cats));
+    }
+    return cats;
+}
+
+function saveCategoryList(type, list) {
+    const key = type === 'in' ? 'lib_cats_in' : 'lib_cats_out';
+    localStorage.setItem(key, JSON.stringify(list));
+    renderSettingsCategories();
+    updateCatDropdown();
+}
+
+function addNewCategory(type) {
+    const name = prompt("Enter new category name:");
+    if (!name || name.trim() === '') return;
+    let list = getCategories(type);
+    if (list.includes(name)) return alert("Category already exists!");
+    list.push(name.trim());
+    saveCategoryList(type, list);
+}
+
+function deleteCategory(type, name) {
+    if (!confirm(`Delete "${name}" category?`)) return;
+    let list = getCategories(type);
+    list = list.filter(c => c !== name);
+    saveCategoryList(type, list);
+}
+
+function renderSettingsCategories() {
+    const expList = getCategories('out');
+    const incList = getCategories('in');
+
+    $('expCatList').innerHTML = expList.map(c => `
+        <div class="cat-item"><span>${c}</span><button class="cat-del-btn" onclick="deleteCategory('out', '${c}')">DEL</button></div>
+    `).join('');
+
+    $('incCatList').innerHTML = incList.map(c => `
+        <div class="cat-item"><span>${c}</span><button class="cat-del-btn" onclick="deleteCategory('in', '${c}')">DEL</button></div>
+    `).join('');
+}
+
+function updateCatDropdown() {
+    const type = $('type').value;
+    const cats = getCategories(type);
+    $('cat').innerHTML = cats.map(c => `<option>${c}</option>`).join('');
+}
+
+// --- NAVIGATION & CORE ---
+function nav(p) {
+    document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(x => x.classList.remove('active'));
+    $(p).classList.add('active');
+    document.querySelector(`[data-page='${p}']`).classList.add('active');
+    refresh();
+}
+
+function refresh() {
+    // Lifetime Totals
+    let lIn=0, lOut=0;
+    Object.keys(localStorage).filter(k => k.startsWith('lib_data_')).forEach(k => {
+        JSON.parse(localStorage.getItem(k)).forEach(x => { x.type === 'in' ? lIn += x.amt : lOut += x.amt });
+    });
+    $('lifeIn').innerText = lIn.toLocaleString();
+    $('lifeOut').innerText = lOut.toLocaleString();
+    $('lifeBalance').innerText = (lIn - lOut).toLocaleString();
+
+    // Month Logic
+    const month = $('monthPicker').value;
+    const db = JSON.parse(localStorage.getItem('lib_data_' + month)) || [];
+    let mIn = 0, mOut = 0, grouped = {};
+    const q = ($('logSearch').value || '').toLowerCase();
+
+    db.forEach(x => {
+        x.type === 'in' ? mIn += x.amt : mOut += x.amt;
+        if (!q || x.desc.toLowerCase().includes(q) || x.cat.toLowerCase().includes(q)) {
+            grouped[x.date] = grouped[x.date] || [];
+            grouped[x.date].push(x);
         }
+    });
 
-        function init() {
-            const now = new Date();
-            monthPicker.value = now.toISOString().slice(0, 7);
-            addDate.value = now.toISOString().slice(0, 10);
-            monthPicker.onchange = refresh;
-            setTheme(localStorage.getItem('lib_theme') || 'dark');
-            loadCats('cat', 'out');
+    const b = parseFloat(localStorage.getItem('budget_' + month)) || 0;
+    $('remaining').innerText = (b - mOut).toLocaleString();
+    $('limitDisp').innerText = b.toLocaleString();
+    $('percentDisp').innerText = b ? Math.round(mOut / b * 100) + '%' : '0%';
+    $('progress-fill').style.width = b ? Math.min(mOut / b * 100, 100) + '%' : '0%';
+    $('monthBalance').innerText = (mIn - mOut).toLocaleString();
+    
+    renderLog(grouped);
+}
+
+function renderLog(g) {
+    let h = '';
+    const dates = Object.keys(g).sort().reverse();
+    if (!dates.length) { $('logList').innerHTML = '<div style="text-align:center;padding:20px;color:var(--dim)">No data</div>'; return; }
+    
+    dates.forEach(dt => {
+        h += `<div class='date-head'>${new Date(dt).toDateString()}</div><div class="card">`;
+        g[dt].forEach(x => {
+            h += `<div class='log-item' onclick="editEntry('${dt}', ${x.id})">
+                <div><b>${x.cat}</b><br><small>${x.person} • ${x.desc || ''}</small></div>
+                <div class='${x.type === 'in' ? 'amt-in' : 'amt-out'}'>${x.type === 'in' ? '+' : '-'}${x.amt.toLocaleString()}</div>
+            </div>`;
+        });
+        h += `</div>`;
+    });
+    $('logList').innerHTML = h;
+}
+
+// --- EDIT MODAL ---
+function editEntry(date, id) {
+    const key = 'lib_data_' + date.slice(0, 7);
+    let db = JSON.parse(localStorage.getItem(key));
+    const e = db.find(x => x.id === id);
+    
+    const m = document.createElement('div');
+    m.style = 'position:fixed;inset:0;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px';
+    m.innerHTML = `<div class='card' style='width:100%;max-width:350px' onclick='event.stopPropagation()'>
+        <label>Edit Entry</label>
+        <input type='date' id='ed' value='${e.date}'>
+        <label>Person</label>
+        <select id='ep'>
+            <option ${e.person==='MIU'?'selected':''}>MIU</option>
+            <option ${e.person==='RAYA'?'selected':''}>RAYA</option>
+        </select>
+        <label>Type</label>
+        <select id='et'>
+            <option value='in' ${e.type==='in'?'selected':''}>Income</option>
+            <option value='out' ${e.type==='out'?'selected':''}>Expense</option>
+        </select>
+        <label>Category</label>
+        <select id='ec'></select>
+        <label>Description</label>
+        <input id='edes' value='${e.desc}' placeholder="Note...">
+        <label>Amount</label>
+        <input id='ea' type='number' value='${e.amt}'>
+        <button class='btn' id='saveEditBtn'>Save Changes</button>
+        <button class='btn' style='background:var(--danger)' id='delEditBtn'>Delete</button>
+        <button class='btn' style='background:var(--dim)' id='cancelEditBtn'>Cancel</button>
+    </div>`;
+    document.body.appendChild(m);
+
+    const et = $('et');
+    const ec = $('ec');
+    
+    // Updates category dropdown inside the modal dynamically based on type selected
+    const updateEditCats = () => {
+        const cats = getCategories(et.value);
+        ec.innerHTML = cats.map(c => `<option ${c===e.cat?'selected':''}>${c}</option>`).join('');
+    };
+    
+    et.onchange = updateEditCats;
+    updateEditCats();
+
+    $('saveEditBtn').onclick = () => {
+        const idx = db.findIndex(x => x.id === id);
+        db[idx] = {...db[idx], date: $('ed').value, person: $('ep').value, type: et.value, cat: ec.value, desc: $('edes').value, amt: parseFloat($('ea').value)};
+        localStorage.setItem(key, JSON.stringify(db));
+        document.body.removeChild(m);
+        refresh();
+    };
+    
+    $('delEditBtn').onclick = () => {
+        if(confirm('Delete this entry?')) {
+            localStorage.setItem(key, JSON.stringify(db.filter(x => x.id !== id)));
+            document.body.removeChild(m);
             refresh();
         }
+    };
+    
+    $('cancelEditBtn').onclick = () => document.body.removeChild(m);
+}
 
-        function nav(p, btn) {
-            document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(x => x.classList.remove('active'));
-            document.getElementById(p).classList.add('active');
-            btn.classList.add('active');
-            refresh();
-        }
+// --- ADD/SAVE LOGIC ---
+function saveBudget() {
+    localStorage.setItem('budget_' + $('monthPicker').value, $('budgetInput').value || 0);
+    alert("Budget saved!");
+    nav('dash');
+}
 
-        function loadCats(id, type) {
-            const list = type === 'in' ? incomeCats : expenseCats;
-            document.getElementById(id).innerHTML = list.map(c => `<option value="${c}">${c}</option>`).join('');
-        }
+$('addBtn').onclick = function() {
+    const val = parseFloat($('amt').value);
+    if (!val || val <= 0) return alert('Enter amount');
+    const m = $('addDate').value.slice(0, 7);
+    const k = 'lib_data_' + m;
+    let db = JSON.parse(localStorage.getItem(k)) || [];
+    
+    const entry = {
+        id: Date.now(),
+        date: $('addDate').value,
+        type: $('type').value,
+        cat: $('cat').value,
+        desc: $('desc').value,
+        amt: val
+    };
 
-        function saveEntry() {
-            if (!amt.value || amt.value <= 0) return alert("Enter amount");
-            const key = `lib_${addDate.value.slice(0, 7)}`;
-            const db = JSON.parse(localStorage.getItem(key)) || [];
-            db.push({ id: Date.now(), date: addDate.value, person: person.value, type: type.value, cat: cat.value, desc: desc.value, amt: parseFloat(amt.value) });
-            localStorage.setItem(key, JSON.stringify(db));
-            desc.value = ''; amt.value = '';
-            nav('dash', document.querySelector('.nav-btn'));
-        }
+    if ($('person').value === 'BOTH') {
+        db.push({ ...entry, person: 'MIU', amt: val / 2 });
+        db.push({ ...entry, id: Date.now() + 1, person: 'RAYA', amt: val / 2 });
+    } else {
+        db.push({ ...entry, person: $('person').value });
+    }
 
-        function saveBudget() {
-            localStorage.setItem(`budget_${monthPicker.value}`, budgetInput.value);
-            nav('dash', document.querySelector('.nav-btn'));
-        }
+    localStorage.setItem(k, JSON.stringify(db));
+    $('amt').value = ''; $('desc').value = '';
+    nav('dash');
+};
 
-        function setRec() {
-            budgetInput.value = budgetRec.getAttribute('data-val');
-            saveBudget();
-        }
+$('resetBtn').onclick = function() {
+    if (confirm('Clear current month data? This cannot be undone.')) {
+        localStorage.removeItem('lib_data_' + $('monthPicker').value);
+        refresh();
+    }
+};
 
-        function refresh() {
-            let lIn = 0, lOut = 0;
-            Object.keys(localStorage).filter(k => k.startsWith('lib_')).forEach(k => {
-                JSON.parse(localStorage.getItem(k)).forEach(x => { if(x.type === 'in') lIn += x.amt; else lOut += x.amt; });
-            });
+$('monthPicker').onchange = refresh;
+$('logSearch').oninput = refresh;
+document.querySelectorAll('.nav-btn').forEach(b => b.onclick = () => nav(b.dataset.page));
 
-            lifeBalance.innerText = (lIn - lOut).toLocaleString();
-            lifeIn.innerText = lIn.toLocaleString();
-            lifeOut.innerText = lOut.toLocaleString();
-
-            const mKey = `lib_${monthPicker.value}`;
-            const mDb = JSON.parse(localStorage.getItem(mKey)) || [];
-            let mIn = 0, mOut = 0, grouped = {};
-            const query = logSearch.value.toLowerCase();
-
-            mDb.forEach(x => {
-                if (x.type === 'in') mIn += x.amt; else mOut += x.amt;
-                if (x.desc.toLowerCase().includes(query) || x.cat.toLowerCase().includes(query)) {
-                    grouped[x.date] = grouped[x.date] || []; grouped[x.date].push(x);
-                }
-            });
-
-            const budget = parseFloat(localStorage.getItem(`budget_${monthPicker.value}`)) || 0;
-            const remains = budget - mOut;
-            const percent = budget > 0 ? Math.min((mOut / budget) * 100, 100) : 0;
-            
-            limitDisp.innerText = budget.toLocaleString();
-            remaining.innerText = remains.toLocaleString();
-            monthOutDash.innerText = mOut.toLocaleString();
-            percentDisp.innerText = Math.round(percent) + "%";
-            const fill = document.getElementById('progress-fill');
-            fill.style.width = percent + "%";
-            fill.style.background = percent > 90 ? 'var(--danger)' : (percent > 70 ? 'var(--warning)' : 'var(--accent)');
-
-            const d = new Date(monthPicker.value + "-01"); d.setMonth(d.getMonth() - 1);
-            const lastExp = (JSON.parse(localStorage.getItem(`lib_${d.toISOString().slice(0, 7)}`)) || []).reduce((a, x) => x.type === 'out' ? a + x.amt : a, 0);
-            budgetRec.innerText = lastExp > 0 ? `RECOMMENDED: ${lastExp.toLocaleString()}` : "";
-            budgetRec.setAttribute('data-val', lastExp);
-
-            monthBalance.innerText = (mIn - mOut).toLocaleString();
-            monthlyLabel.innerText = new Date(monthPicker.value + "-01").toLocaleString('default', { month: 'long' }) + " Net";
-            updateLog(grouped);
-        }
-
-        function updateLog(grouped) {
-            let html = '';
-            const dates = Object.keys(grouped).sort().reverse();
-            if(!dates.length) { logList.innerHTML = "<div style='color:#888;text-align:center;padding:30px'>No data</div>"; return; }
-            dates.forEach(d => {
-                html += `<div class="date-head">${new Date(d).toDateString().toUpperCase()}</div>`;
-                grouped[d].forEach(x => {
-                    html += `<div class="log-item" onclick="openEdit('${d}', ${x.id})">
-                        <div><b>${x.cat}</b><br><small style="color:var(--dim)">${x.person} • ${x.desc || '...'}</small></div>
-                        <div class="${x.type==='in'?'amt-in':'amt-out'}">${x.type==='in'?'+':'-'}${x.amt.toLocaleString()}</div>
-                    </div>`;
-                });
-            });
-            logList.innerHTML = html;
-        }
-
-        function openEdit(date, id) {
-            const db = JSON.parse(localStorage.getItem(`lib_${date.slice(0, 7)}`));
-            const e = db.find(x => x.id === id);
-            editModal.style.display = 'flex';
-            document.getElementById('modalContent').innerHTML = `
-                <div class="card" onclick="event.stopPropagation()">
-                    <label>Edit Transaction</label>
-                    <input type="date" id="ed" value="${e.date}">
-                    <select id="ep">${["MIU","RAYA","BOTH"].map(p=>`<option ${p===e.person?'selected':''}>${p}</option>`).join('')}</select>
-                    <select id="et" onchange="loadCats('ec',this.value)"><option value="in" ${e.type==='in'?'selected':''}>Income</option><option value="out" ${e.type==='out'?'selected':''}>Expense</option></select>
-                    <select id="ec"></select>
-                    <input id="edes" value="${e.desc}">
-                    <input id="ea" type="number" value="${e.amt}">
-                    <button class="btn" onclick="saveEdit(${id}, '${date}')">Save Changes</button>
-                    <button class="btn" style="background:none; color:var(--danger); margin-top:10px" onclick="delEntry(${id}, '${date}')">Delete</button>
-                </div>`;
-            loadCats('ec', e.type); document.getElementById('ec').value = e.cat;
-        }
-
-        function saveEdit(id, oldDate) {
-            let oldKey = `lib_${oldDate.slice(0, 7)}`;
-            let oldDb = JSON.parse(localStorage.getItem(oldKey));
-            const idx = oldDb.findIndex(x => x.id === id);
-            const entry = { ...oldDb[idx], date: ed.value, person: ep.value, type: et.value, cat: ec.value, desc: edes.value, amt: parseFloat(ea.value) };
-            oldDb.splice(idx, 1);
-            localStorage.setItem(oldKey, JSON.stringify(oldDb));
-            let newKey = `lib_${ed.value.slice(0, 7)}`;
-            let newDb = JSON.parse(localStorage.getItem(newKey)) || [];
-            newDb.push(entry);
-            localStorage.setItem(newKey, JSON.stringify(newDb));
-            editModal.style.display = 'none'; refresh();
-        }
-
-        function delEntry(id, date) {
-            if(confirm("Delete?")) {
-                let k = `lib_${date.slice(0, 7)}`;
-                localStorage.setItem(k, JSON.stringify(JSON.parse(localStorage.getItem(k)).filter(x => x.id !== id)));
-                editModal.style.display = 'none'; refresh();
-            }
-        }
-
-        function resetMonth() {
-            if(confirm("Clear this month's data?")) { 
-                localStorage.removeItem(`lib_${monthPicker.value}`); 
-                localStorage.removeItem(`budget_${monthPicker.value}`);
-                refresh(); 
-            }
-        }
-
-        init();
-    </script>
+// Init
+(function init() {
+    const now = new Date();
+    $('monthPicker').value = now.toISOString().slice(0, 7);
+    $('addDate').value = now.toISOString().slice(0, 10);
+    renderSettingsCategories();
+    updateCatDropdown();
+    refresh();
+})();
+</script>
 </body>
 </html>
