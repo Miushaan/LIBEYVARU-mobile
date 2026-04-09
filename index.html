@@ -1,361 +1,240 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>LIBEYVARU</title>
-<style>
-:root{--bg:#f2f2f7;--accent:#007aff;--text:#000;--dim:#8e8e93;--border:rgba(0,0,0,.1);--success:#34c759;--danger:#ff3b30;--card-bg:#fff;--nav-bg:rgba(255,255,255,.9);--input-bg:#e5e5ea;--header-bg:#f2f2f7}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,sans-serif;height:100vh;overflow:hidden}
-header{padding:55px 22px 15px;display:flex;justify-content:space-between;align-items:center;background:var(--header-bg)}
-.brand{font-weight:800;font-size:1.4rem;color:var(--accent)}
-main{padding:15px 20px 150px;overflow-y:auto;height:calc(100vh - 80px)}
-.page{display:none}.page.active{display:block}
-.card{background:var(--card-bg);border-radius:22px;padding:20px;margin-bottom:16px;border:1px solid var(--border)}
-label{font-size:10px;color:var(--dim);font-weight:700;text-transform:uppercase;margin-bottom:6px;display:block}
-input,select{width:100%;height:48px;padding:0 14px;border-radius:14px;border:1px solid var(--border);background:var(--input-bg);color:var(--text);margin-bottom:14px;font-size:15px}
-.btn{width:100%;padding:15px;border-radius:16px;border:none;font-weight:800;background:var(--accent);color:#fff;font-size:16px;margin-bottom:6px;cursor:pointer}
-.nav-btn{background:none;border:none;color:var(--dim);display:flex;flex-direction:column;align-items:center;font-size:10px;font-weight:700}
-.nav-btn span{font-size:20px;margin-bottom:4px}
-.nav-btn.active{color:var(--accent)}
-nav{position:fixed;bottom:30px;left:18px;right:18px;height:75px;background:var(--nav-bg);backdrop-filter:blur(20px);border-radius:24px;display:flex;justify-content:space-around;align-items:center;border:1px solid var(--border);z-index:100}
-.log-item{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer}
-.amt-in{color:var(--success);font-weight:800}.amt-out{color:var(--danger);font-weight:800}
-.date-head{font-size:11px;color:var(--accent);margin:18px 0 8px;font-weight:700}
-.progress-bg{height:10px;background:var(--input-bg);border-radius:5px;margin:15px 0;overflow:hidden}
-#progress-fill{height:100%;width:0%;background:var(--accent);transition:width 0.3s}
-
-/* Category Management Styles */
-.cat-list { margin-bottom: 15px; max-height: 200px; overflow-y: auto; }
-.cat-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: var(--bg); border-radius: 12px; margin-bottom: 6px; font-weight: 600; font-size: 14px; }
-.cat-del-btn { background: var(--danger); color: white; border: none; border-radius: 8px; padding: 4px 10px; font-size: 10px; font-weight: 800; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#020617">
+    <title>MVR Finance Shared</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #020617; color: #f8fafc; }
+        .hidden { display: none; }
+        .glass-dark { 
+            background: rgba(30, 41, 59, 0.4); 
+            backdrop-filter: blur(16px); 
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .neo-blue { box-shadow: 0 0 20px rgba(37, 99, 235, 0.2); }
+        input::placeholder { color: #64748b; }
+        .animate-slide { animation: slideDown 0.3s ease-out; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
 </head>
-<body>
-<header>
-    <div class="brand">LIBEYVARU</div>
-    <input type="month" id="monthPicker" style="margin:0;width:auto;background:transparent;border:none;color:var(--accent);font-weight:700">
-</header>
+<body class="min-h-screen pb-10">
 
-<main>
-    <div id="dash" class="page active">
-        <div class="card">
-            <label>Budget Progress</label>
-            <div style="display:flex;justify-content:space-between;align-items:flex-end">
-                <div id="remaining" style="font-size:2rem;font-weight:800">0</div>
-                <div style="font-size:11px;color:var(--dim)">MVR LEFT</div>
+    <div id="auth-container" class="flex items-center justify-center min-h-screen p-6">
+        <div class="w-full max-w-md glass-dark p-10 rounded-[2.5rem] shadow-2xl">
+            <div class="text-center mb-10">
+                <div class="w-20 h-20 bg-blue-600 rounded-3xl mx-auto mb-6 flex items-center justify-center shadow-xl rotate-3">
+                    <span class="text-white text-4xl font-bold -rotate-3">M</span>
+                </div>
+                <h2 class="text-3xl font-extrabold tracking-tight">Shared Hub</h2>
+                <p class="text-slate-500 mt-2 italic text-sm">Collective MVR Tracking</p>
             </div>
-            <div class="progress-bg"><div id="progress-fill"></div></div>
-            <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600">
-                <span>LIMIT: <b id="limitDisp">0</b></span>
-                <span id="percentDisp">0%</span>
-            </div>
-        </div>
-        <div class="card" style="background:var(--accent);border:none">
-            <label style="color:rgba(255,255,255,.7)">Monthly Net</label>
-            <div id="monthBalance" style="font-size:2rem;font-weight:800;color:#fff">0</div>
-        </div>
-        <div class="card">
-            <label>Lifetime Totals</label>
-            <div style="display:flex;justify-content:space-between">
-                <div><small>In</small><div id="lifeIn" style="color:var(--success);font-weight:700">0</div></div>
-                <div><small>Out</small><div id="lifeOut" style="color:var(--danger);font-weight:700">0</div></div>
-                <div><small>Balance</small><div id="lifeBalance" style="font-weight:700">0</div></div>
+            <div class="space-y-4">
+                <input type="email" id="email" placeholder="Email" class="w-full p-4 bg-slate-900/50 border border-slate-800 rounded-2xl focus:border-blue-500 outline-none text-white transition-all">
+                <input type="password" id="password" placeholder="Password" class="w-full p-4 bg-slate-900/50 border border-slate-800 rounded-2xl focus:border-blue-500 outline-none text-white transition-all">
+                <button id="login-btn" class="w-full bg-blue-600 text-white font-bold py-4 rounded-2xl shadow-lg hover:bg-blue-500 transition-all active:scale-95">Sign In</button>
+                <button id="signup-btn" class="w-full text-slate-500 font-bold py-2 text-xs">Register Account</button>
             </div>
         </div>
     </div>
 
-    <div id="add" class="page">
-        <div class="card">
-            <label>Date</label><input type="date" id="addDate">
-            <label>Person</label><select id="person"><option>MIU</option><option>RAYA</option><option>BOTH</option></select>
-            <label>Type</label><select id="type" onchange="updateCatDropdown()"><option value="out">Expense</option><option value="in">Income</option></select>
-            <label>Category</label><select id="cat"></select>
-            <label>Description</label><input id="desc" placeholder="Note...">
-            <label>Amount (MVR)</label><input id="amt" type="number" inputmode="decimal">
-            <button class="btn" id="addBtn">Add Entry</button>
+    <div id="app-container" class="hidden max-w-md mx-auto p-5">
+        
+        <div class="flex justify-between items-center mb-6">
+            <div id="online-users-list" class="flex -space-x-2">
+                </div>
+            <button id="logout-btn" class="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-red-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="bg-gradient-to-br from-blue-700 to-indigo-900 p-8 rounded-[2.5rem] shadow-2xl neo-blue mb-8 relative overflow-hidden">
+            <div class="relative z-10">
+                <div class="flex justify-between items-start mb-2">
+                    <p class="text-xs uppercase tracking-widest text-blue-200 font-bold">Pooled Balance</p>
+                    <div class="text-right">
+                        <p id="entry-count" class="text-xl font-bold">0</p>
+                        <p class="text-[10px] text-blue-300 uppercase font-bold">Entries</p>
+                    </div>
+                </div>
+                <h2 id="total-balance" class="text-4xl font-bold tracking-tight">MVR 0.00</h2>
+            </div>
+            <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+        </div>
+
+        <section class="glass-dark p-6 rounded-[2.5rem] mb-8 border-slate-800">
+            <div class="space-y-4">
+                <input type="text" id="desc" placeholder="What is this for?" class="w-full p-4 bg-slate-950/50 rounded-2xl border border-slate-800 focus:border-blue-500 outline-none text-white">
+                <input type="number" id="amount" placeholder="0.00" class="w-full p-4 bg-slate-950/50 rounded-2xl border border-slate-800 focus:border-blue-500 outline-none text-2xl font-bold text-white">
+                <div class="flex gap-3">
+                    <button id="add-income" class="flex-1 bg-blue-600 text-white font-bold py-4 rounded-2xl active:scale-95 transition-all">+ Income</button>
+                    <button id="add-expense" class="flex-1 bg-slate-800 text-white font-bold py-4 rounded-2xl border border-slate-700 active:scale-95 transition-all">- Expense</button>
+                </div>
+            </div>
+        </section>
+
+        <button id="history-toggle" class="w-full glass-dark p-5 rounded-2xl flex justify-between items-center group mb-4">
+            <h3 class="font-bold text-sm tracking-wide flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                Shared Activity History
+            </h3>
+            <span id="toggle-icon" class="text-blue-500 transition-transform duration-300">▼</span>
+        </button>
+        
+        <div id="history-container" class="hidden animate-slide space-y-4">
+            <div id="transaction-list" class="space-y-4"></div>
         </div>
     </div>
 
-    <div id="log" class="page">
-        <input type="text" id="logSearch" placeholder="Search transactions..." style="margin-bottom:10px">
-        <div id="logList"></div>
-    </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } 
+            from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getDatabase, ref, push, onValue, remove, set, onDisconnect } 
+            from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    <div id="settings" class="page">
-        <div class="card">
-            <label>Monthly Budget</label>
-            <input type="number" id="budgetInput">
-            <button class="btn" onclick="saveBudget()">Save Budget</button>
-        </div>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCt9BX2aarll7Epwdl83XsrxeNgwzFzvHk",
+            authDomain: "srdportal.firebaseapp.com",
+            databaseURL: "https://srdportal-default-rtdb.firebaseio.com",
+            projectId: "srdportal",
+            storageBucket: "srdportal.firebasestorage.app",
+            messagingSenderId: "547975504662",
+            appId: "1:547975504662:web:8297d6499c61a79655e637"
+        };
 
-        <div class="card">
-            <label>Manage Expense Categories</label>
-            <div id="expCatList" class="cat-list"></div>
-            <button class="btn" style="background:#555" onclick="addNewCategory('out')">+ Add Expense Category</button>
-        </div>
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
 
-        <div class="card">
-            <label>Manage Income Categories</label>
-            <div id="incCatList" class="cat-list"></div>
-            <button class="btn" style="background:#555" onclick="addNewCategory('in')">+ Add Income Category</button>
-        </div>
+        const authDiv = document.getElementById('auth-container');
+        const appDiv = document.getElementById('app-container');
+        const historyContainer = document.getElementById('history-container');
+        const transactionList = document.getElementById('transaction-list');
+        const userListDiv = document.getElementById('online-users-list');
 
-        <div class="card" style="border-color:var(--danger)">
-            <label style="color:var(--danger)">Danger Zone</label>
-            <button class="btn" style="background:var(--danger)" id="resetBtn">Reset Month</button>
-        </div>
-    </div>
-</main>
+        // Toggle History Logic
+        document.getElementById('history-toggle').onclick = () => {
+            const isHidden = historyContainer.classList.toggle('hidden');
+            document.getElementById('toggle-icon').style.transform = isHidden ? 'rotate(0deg)' : 'rotate(180deg)';
+        };
 
-<nav>
-    <button class="nav-btn active" data-page="dash"><span>📊</span>Dash</button>
-    <button class="nav-btn" data-page="add"><span>➕</span>Add</button>
-    <button class="nav-btn" data-page="log"><span>📜</span>Log</button>
-    <button class="nav-btn" data-page="settings"><span>⚙️</span>Settings</button>
-</nav>
+        // Auth
+        document.getElementById('signup-btn').onclick = () => {
+            createUserWithEmailAndPassword(auth, email.value, password.value).catch(err => alert(err.message));
+        };
+        document.getElementById('login-btn').onclick = () => {
+            signInWithEmailAndPassword(auth, email.value, password.value).catch(err => alert(err.message));
+        };
+        document.getElementById('logout-btn').onclick = () => signOut(auth);
 
-<script>
-// Default categories
-const DEFAULT_EXP = ["Rent", "Bills", "Groceries", "Dining", "Fuel", "Shopping", "Repairs"];
-const DEFAULT_INC = ["Salary", "Business", "Gift", "Refund"];
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                authDiv.classList.add('hidden');
+                appDiv.classList.remove('hidden');
+                
+                // Presence Setup
+                const presenceRef = ref(db, 'presence/' + user.uid);
+                set(presenceRef, { email: user.email, status: 'online' });
+                onDisconnect(presenceRef).remove();
 
-const $ = id => document.getElementById(id);
-
-// --- CATEGORY LOGIC ---
-function getCategories(type) {
-    const key = type === 'in' ? 'lib_cats_in' : 'lib_cats_out';
-    let cats = JSON.parse(localStorage.getItem(key));
-    if (!cats) {
-        cats = type === 'in' ? DEFAULT_INC : DEFAULT_EXP;
-        localStorage.setItem(key, JSON.stringify(cats));
-    }
-    return cats;
-}
-
-function saveCategoryList(type, list) {
-    const key = type === 'in' ? 'lib_cats_in' : 'lib_cats_out';
-    localStorage.setItem(key, JSON.stringify(list));
-    renderSettingsCategories();
-    updateCatDropdown();
-}
-
-function addNewCategory(type) {
-    const name = prompt("Enter new category name:");
-    if (!name || name.trim() === '') return;
-    let list = getCategories(type);
-    if (list.includes(name)) return alert("Category already exists!");
-    list.push(name.trim());
-    saveCategoryList(type, list);
-}
-
-function deleteCategory(type, name) {
-    if (!confirm(`Delete "${name}" category?`)) return;
-    let list = getCategories(type);
-    list = list.filter(c => c !== name);
-    saveCategoryList(type, list);
-}
-
-function renderSettingsCategories() {
-    const expList = getCategories('out');
-    const incList = getCategories('in');
-
-    $('expCatList').innerHTML = expList.map(c => `
-        <div class="cat-item"><span>${c}</span><button class="cat-del-btn" onclick="deleteCategory('out', '${c}')">DEL</button></div>
-    `).join('');
-
-    $('incCatList').innerHTML = incList.map(c => `
-        <div class="cat-item"><span>${c}</span><button class="cat-del-btn" onclick="deleteCategory('in', '${c}')">DEL</button></div>
-    `).join('');
-}
-
-function updateCatDropdown() {
-    const type = $('type').value;
-    const cats = getCategories(type);
-    $('cat').innerHTML = cats.map(c => `<option>${c}</option>`).join('');
-}
-
-// --- NAVIGATION & CORE ---
-function nav(p) {
-    document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
-    document.querySelectorAll('.nav-btn').forEach(x => x.classList.remove('active'));
-    $(p).classList.add('active');
-    document.querySelector(`[data-page='${p}']`).classList.add('active');
-    refresh();
-}
-
-function refresh() {
-    // Lifetime Totals
-    let lIn=0, lOut=0;
-    Object.keys(localStorage).filter(k => k.startsWith('lib_data_')).forEach(k => {
-        JSON.parse(localStorage.getItem(k)).forEach(x => { x.type === 'in' ? lIn += x.amt : lOut += x.amt });
-    });
-    $('lifeIn').innerText = lIn.toLocaleString();
-    $('lifeOut').innerText = lOut.toLocaleString();
-    $('lifeBalance').innerText = (lIn - lOut).toLocaleString();
-
-    // Month Logic
-    const month = $('monthPicker').value;
-    const db = JSON.parse(localStorage.getItem('lib_data_' + month)) || [];
-    let mIn = 0, mOut = 0, grouped = {};
-    const q = ($('logSearch').value || '').toLowerCase();
-
-    db.forEach(x => {
-        x.type === 'in' ? mIn += x.amt : mOut += x.amt;
-        if (!q || x.desc.toLowerCase().includes(q) || x.cat.toLowerCase().includes(q)) {
-            grouped[x.date] = grouped[x.date] || [];
-            grouped[x.date].push(x);
-        }
-    });
-
-    const b = parseFloat(localStorage.getItem('budget_' + month)) || 0;
-    $('remaining').innerText = (b - mOut).toLocaleString();
-    $('limitDisp').innerText = b.toLocaleString();
-    $('percentDisp').innerText = b ? Math.round(mOut / b * 100) + '%' : '0%';
-    $('progress-fill').style.width = b ? Math.min(mOut / b * 100, 100) + '%' : '0%';
-    $('monthBalance').innerText = (mIn - mOut).toLocaleString();
-    
-    renderLog(grouped);
-}
-
-function renderLog(g) {
-    let h = '';
-    const dates = Object.keys(g).sort().reverse();
-    if (!dates.length) { $('logList').innerHTML = '<div style="text-align:center;padding:20px;color:var(--dim)">No data</div>'; return; }
-    
-    dates.forEach(dt => {
-        h += `<div class='date-head'>${new Date(dt).toDateString()}</div><div class="card">`;
-        g[dt].forEach(x => {
-            h += `<div class='log-item' onclick="editEntry('${dt}', ${x.id})">
-                <div><b>${x.cat}</b><br><small>${x.person} • ${x.desc || ''}</small></div>
-                <div class='${x.type === 'in' ? 'amt-in' : 'amt-out'}'>${x.type === 'in' ? '+' : '-'}${x.amt.toLocaleString()}</div>
-            </div>`;
+                loadPresence();
+                loadSharedData();
+            } else {
+                authDiv.classList.remove('hidden');
+                appDiv.classList.add('hidden');
+            }
         });
-        h += `</div>`;
-    });
-    $('logList').innerHTML = h;
-}
 
-// --- EDIT MODAL ---
-function editEntry(date, id) {
-    const key = 'lib_data_' + date.slice(0, 7);
-    let db = JSON.parse(localStorage.getItem(key));
-    const e = db.find(x => x.id === id);
-    
-    const m = document.createElement('div');
-    m.style = 'position:fixed;inset:0;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px';
-    m.innerHTML = `<div class='card' style='width:100%;max-width:350px' onclick='event.stopPropagation()'>
-        <label>Edit Entry</label>
-        <input type='date' id='ed' value='${e.date}'>
-        <label>Person</label>
-        <select id='ep'>
-            <option ${e.person==='MIU'?'selected':''}>MIU</option>
-            <option ${e.person==='RAYA'?'selected':''}>RAYA</option>
-        </select>
-        <label>Type</label>
-        <select id='et'>
-            <option value='in' ${e.type==='in'?'selected':''}>Income</option>
-            <option value='out' ${e.type==='out'?'selected':''}>Expense</option>
-        </select>
-        <label>Category</label>
-        <select id='ec'></select>
-        <label>Description</label>
-        <input id='edes' value='${e.desc}' placeholder="Note...">
-        <label>Amount</label>
-        <input id='ea' type='number' value='${e.amt}'>
-        <button class='btn' id='saveEditBtn'>Save Changes</button>
-        <button class='btn' style='background:var(--danger)' id='delEditBtn'>Delete</button>
-        <button class='btn' style='background:var(--dim)' id='cancelEditBtn'>Cancel</button>
-    </div>`;
-    document.body.appendChild(m);
-
-    const et = $('et');
-    const ec = $('ec');
-    
-    // Updates category dropdown inside the modal dynamically based on type selected
-    const updateEditCats = () => {
-        const cats = getCategories(et.value);
-        ec.innerHTML = cats.map(c => `<option ${c===e.cat?'selected':''}>${c}</option>`).join('');
-    };
-    
-    et.onchange = updateEditCats;
-    updateEditCats();
-
-    $('saveEditBtn').onclick = () => {
-        const idx = db.findIndex(x => x.id === id);
-        db[idx] = {...db[idx], date: $('ed').value, person: $('ep').value, type: et.value, cat: ec.value, desc: $('edes').value, amt: parseFloat($('ea').value)};
-        localStorage.setItem(key, JSON.stringify(db));
-        document.body.removeChild(m);
-        refresh();
-    };
-    
-    $('delEditBtn').onclick = () => {
-        if(confirm('Delete this entry?')) {
-            localStorage.setItem(key, JSON.stringify(db.filter(x => x.id !== id)));
-            document.body.removeChild(m);
-            refresh();
+        function loadPresence() {
+            onValue(ref(db, 'presence'), (snap) => {
+                userListDiv.innerHTML = '';
+                const users = snap.val();
+                if (users) {
+                    Object.values(users).forEach(u => {
+                        const div = document.createElement('div');
+                        div.className = "w-10 h-10 rounded-full bg-slate-800 border-2 border-slate-950 flex items-center justify-center text-xs font-bold text-blue-400";
+                        div.innerText = u.email.charAt(0).toUpperCase();
+                        div.title = u.email;
+                        userListDiv.appendChild(div);
+                    });
+                }
+            });
         }
-    };
-    
-    $('cancelEditBtn').onclick = () => document.body.removeChild(m);
-}
 
-// --- ADD/SAVE LOGIC ---
-function saveBudget() {
-    localStorage.setItem('budget_' + $('monthPicker').value, $('budgetInput').value || 0);
-    alert("Budget saved!");
-    nav('dash');
-}
+        function loadSharedData() {
+            onValue(ref(db, 'shared_transactions'), (snapshot) => {
+                transactionList.innerHTML = '';
+                let total = 0;
+                let count = 0;
+                const data = snapshot.val();
+                
+                if (data) {
+                    const entries = Object.entries(data).sort((a, b) => b[1].timestamp - a[1].timestamp);
+                    count = entries.length;
 
-$('addBtn').onclick = function() {
-    const val = parseFloat($('amt').value);
-    if (!val || val <= 0) return alert('Enter amount');
-    const m = $('addDate').value.slice(0, 7);
-    const k = 'lib_data_' + m;
-    let db = JSON.parse(localStorage.getItem(k)) || [];
-    
-    const entry = {
-        id: Date.now(),
-        date: $('addDate').value,
-        type: $('type').value,
-        cat: $('cat').value,
-        desc: $('desc').value,
-        amt: val
-    };
+                    entries.forEach(([id, item]) => {
+                        const val = parseFloat(item.amount);
+                        total += val;
+                        
+                        const div = document.createElement('div');
+                        div.className = "glass-dark p-5 rounded-2xl flex justify-between items-center animate-slide";
+                        div.innerHTML = `
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-slate-900 border border-slate-800 ${val > 0 ? 'text-green-400' : 'text-red-400'} font-black text-xs">
+                                    ${val > 0 ? 'IN' : 'OUT'}
+                                </div>
+                                <div>
+                                    <p class="font-bold text-white text-sm leading-tight">${item.desc}</p>
+                                    <p class="text-[9px] font-bold text-slate-500 mt-1 uppercase tracking-wider">${item.addedBy.split('@')[0]} • ${new Date(item.timestamp).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-extrabold text-sm ${val > 0 ? 'text-green-400' : 'text-slate-100'}">
+                                    ${val > 0 ? '+' : ''}${val.toFixed(2)}
+                                </p>
+                                <button onclick="deleteItem('${id}')" class="text-[9px] font-bold text-slate-600 hover:text-red-500 uppercase mt-1">Delete</button>
+                            </div>
+                        `;
+                        transactionList.appendChild(div);
+                    });
+                }
+                document.getElementById('total-balance').innerText = `MVR ${total.toLocaleString('en-MV', {minimumFractionDigits: 2})}`;
+                document.getElementById('entry-count').innerText = count;
+            });
+        }
 
-    if ($('person').value === 'BOTH') {
-        db.push({ ...entry, person: 'MIU', amt: val / 2 });
-        db.push({ ...entry, id: Date.now() + 1, person: 'RAYA', amt: val / 2 });
-    } else {
-        db.push({ ...entry, person: $('person').value });
-    }
+        window.deleteItem = (id) => {
+            if(confirm("Delete this shared entry?")) {
+                remove(ref(db, `shared_transactions/${id}`));
+            }
+        };
 
-    localStorage.setItem(k, JSON.stringify(db));
-    $('amt').value = ''; $('desc').value = '';
-    nav('dash');
-};
+        const addTransaction = (isIncome) => {
+            const amountInput = document.getElementById('amount');
+            const descInput = document.getElementById('desc');
+            const val = parseFloat(amountInput.value);
+            
+            if(!val || !descInput.value) return;
 
-$('resetBtn').onclick = function() {
-    if (confirm('Clear current month data? This cannot be undone.')) {
-        localStorage.removeItem('lib_data_' + $('monthPicker').value);
-        refresh();
-    }
-};
+            push(ref(db, 'shared_transactions'), {
+                desc: descInput.value,
+                amount: isIncome ? Math.abs(val) : -Math.abs(val),
+                addedBy: auth.currentUser.email,
+                timestamp: Date.now()
+            });
 
-$('monthPicker').onchange = refresh;
-$('logSearch').oninput = refresh;
-document.querySelectorAll('.nav-btn').forEach(b => b.onclick = () => nav(b.dataset.page));
+            amountInput.value = '';
+            descInput.value = '';
+        };
 
-// Init
-(function init() {
-    const now = new Date();
-    $('monthPicker').value = now.toISOString().slice(0, 7);
-    $('addDate').value = now.toISOString().slice(0, 10);
-    renderSettingsCategories();
-    updateCatDropdown();
-    refresh();
-})();
-</script>
+        document.getElementById('add-income').onclick = () => addTransaction(true);
+        document.getElementById('add-expense').onclick = () => addTransaction(false);
+    </script>
 </body>
 </html>
